@@ -49,7 +49,7 @@ export interface SongCluster {
     centroid: { x: number; y: number };
 }
 
-export type SimilarityMetric = 'jaccard' | 'cosine' | 'euclidean';
+export type SimilarityMetric = 'jaccard' | 'cosine' | 'euclidean'| 'levenshtein' ;
 
 export interface VisualizationSettings {
     similarityThreshold: number;

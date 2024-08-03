@@ -1,6 +1,6 @@
 import  { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import * as React from 'react';
-import { SpotifySong, SongSimilarity } from '../../entities/song/model/types';
+import {SpotifySong, SongSimilarity, SimilarityMetric} from '../../entities/song/model/types';
 import { parseSpotifyCSV } from '../../shared/lib/csvParser';
 import { calculateSimilarity } from '../../features/calculateSimilarity/lib/calculateSimilarity';
 import axios from 'axios';
@@ -34,6 +34,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
+        const metric:SimilarityMetric = 'levenshtein';
         const fetchData = async () => {
             try {
                 setLoading(true);
@@ -47,7 +48,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
                 setSongs(parsedSongs);
 
                 // Расчет сходства
-                const calculatedSimilarities = calculateSimilarity(parsedSongs, 'cosine');
+                const calculatedSimilarities = calculateSimilarity(parsedSongs, metric );
                 setSimilarities(calculatedSimilarities);
             } catch (err) {
                 setError('Error loading or processing data');

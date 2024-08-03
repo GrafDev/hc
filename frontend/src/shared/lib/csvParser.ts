@@ -1,6 +1,5 @@
-import Papa from 'papaparse';
-import {SpotifySong} from "../../entities/song/model/types.ts";
-
+import {SpotifySong} from "../../entities/song/model/types";
+import * as Papa from 'papaparse';
 
 async function fetchCSV(url: string): Promise<string> {
     const response = await fetch(url);
@@ -11,14 +10,14 @@ async function fetchCSV(url: string): Promise<string> {
 }
 
 export function parseSpotifyCSV(csvText: string): Promise<SpotifySong[]> {
-    console.log("csvText",csvText)
+    // console.log("csvText",csvText)
     return new Promise((resolve, reject) => {
         Papa.parse(csvText, {
             header: true,
             dynamicTyping: true,
             complete: (results) => {
                 const songs = results.data as SpotifySong[];
-                console.log(songs)
+                // console.log(songs)
                 resolve(songs);
             },
             error: (error: any) => {

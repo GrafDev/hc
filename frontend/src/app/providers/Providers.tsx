@@ -1,6 +1,7 @@
-import React, { ReactNode } from 'react';
 import { DataProvider } from './DataProvider';
-import {ChakraProviderOptions} from "./ChakraProviderOptions.tsx";
+import {ChakraProviderOptions} from "./ChakraProviderOptions";
+import {ReactNode} from "react";
+import * as React from 'react';
 
 interface ProvidersProps {
     children: ReactNode;

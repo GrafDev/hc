@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { VisualizationSettings } from '../../../entities/song/model/types';
 
-import {Heading, VStack} from "@chakra-ui/react";
+import {Box, Heading, Slider,Text, SliderFilledTrack, SliderThumb, SliderTrack, VStack} from "@chakra-ui/react";
 
 interface VisualizationControlsProps {
     settings: VisualizationSettings;
@@ -17,60 +17,82 @@ const VisualizationControls: React.FC<VisualizationControlsProps> = ({ settings,
     return (
         <VStack className="visualization-controls" align={"start"} w={"100%"}>
             <Heading>Visualization Settings</Heading>
-            <div>
-                <label htmlFor="similarityThreshold">Similarity Threshold:</label>
-                <input
-                    type="range"
-                    id="similarityThreshold"
-                    name="similarityThreshold"
-                    min="0"
-                    max="1"
-                    step="0.01"
-                    value={settings.similarityThreshold}
-                    onChange={handleChange}
-                />
-                <span>{settings.similarityThreshold.toFixed(2)}</span>
-            </div>
-            <div>
-                <label htmlFor="maxConnections">Max Connections:</label>
-                <input
-                    type="number"
-                    id="maxConnections"
-                    name="maxConnections"
-                    min="1"
-                    max="100"
-                    value={settings.maxConnections}
-                    onChange={handleChange}
-                />
-            </div>
-            <div>
-                <label htmlFor="nodeSizeScale">Node Size Scale:</label>
-                <input
-                    type="range"
-                    id="nodeSizeScale"
-                    name="nodeSizeScale"
-                    min="0.1"
-                    max="2"
-                    step="0.1"
-                    value={settings.nodeSizeScale}
-                    onChange={handleChange}
-                />
-                <span>{settings.nodeSizeScale.toFixed(1)}</span>
-            </div>
-            <div>
-                <label htmlFor="edgeWeightScale">Edge Weight Scale:</label>
-                <input
-                    type="range"
-                    id="edgeWeightScale"
-                    name="edgeWeightScale"
-                    min="0.1"
-                    max="2"
-                    step="0.1"
-                    value={settings.edgeWeightScale}
-                    onChange={handleChange}
-                />
-                <span>{settings.edgeWeightScale.toFixed(1)}</span>
-            </div>
+
+            {/* Similarity Threshold */}
+            <Box w={"100%"}>
+                <Text>Similarity Threshold:</Text>
+                <Slider
+                    aria-label='similarityThreshold'
+                    defaultValue={settings.similarityThreshold}
+                    min={0}
+                    max={1}
+                    step={0.01}
+                    onChange={(value) => handleChange('similarityThreshold', value)}
+                >
+                    <SliderTrack>
+                        <SliderFilledTrack />
+                    </SliderTrack>
+                    <SliderThumb />
+                </Slider>
+                <Text>{settings.similarityThreshold.toFixed(2)}</Text>
+            </Box>
+
+            {/* Max Connections */}
+            <Box>
+                <Text>Max Connections:</Text>
+                <Slider
+                    aria-label='maxConnections'
+                    defaultValue={settings.maxConnections}
+                    min={0}
+                    max={100}
+                    step={1}
+                    onChange={(value) => handleChange('maxConnections', value)}
+                >
+                    <SliderTrack>
+                        <SliderFilledTrack />
+                    </SliderTrack>
+                    <SliderThumb />
+                </Slider>
+                <Text>{settings.maxConnections.toFixed(2)}</Text>
+            </Box>
+
+            {/* Node Size Scale */}
+            <Box>
+                <Text>Node Size Scale:</Text>
+                <Slider
+                    aria-label='nodeSizeScale'
+                    defaultValue={settings.nodeSizeScale}
+                    min={0.1}
+                    max={2}
+                    step={0.1}
+                    onChange={(value) => handleChange('nodeSizeScale', value)}
+                >
+                    <SliderTrack>
+                        <SliderFilledTrack />
+                    </SliderTrack>
+                    <SliderThumb />
+                </Slider>
+                <Text>{settings.nodeSizeScale.toFixed(1)}</Text>
+            </Box>
+
+            {/* Edge Weight Scale */}
+            <Box>
+                <Text>Edge Weight Scale:</Text>
+                <Slider
+                    aria-label='edgeWeightScale'
+                    defaultValue={settings.edgeWeightScale}
+                    min={0.1}
+                    max={2}
+                    step={0.1}
+                    onChange={(value) => handleChange('edgeWeightScale', value)}
+                >
+                    <SliderTrack>
+                        <SliderFilledTrack />
+                    </SliderTrack>
+                    <SliderThumb />
+                </Slider>
+                <Text>{settings.edgeWeightScale.toFixed(1)}</Text>
+            </Box>
         </VStack>
     );
 };
