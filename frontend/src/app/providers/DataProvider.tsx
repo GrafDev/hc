@@ -12,6 +12,7 @@ interface DataContextType {
     error: string | null;
 }
 
+
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
 export const useData = () => {
