@@ -1,0 +1,20 @@
+
+services:
+
+  frontend:
+    build: ./frontend
+    restart: always
+    ports:
+      - '3012:3000'
+    volumes:
+      - /app/node_modules
+      - ./frontend:/app
+
+  api:
+    build: ./api
+    restart: always
+    ports:
+      - '5512:5000'
+    volumes:
+      - /app/node_modules
+      - ./api:/app
