@@ -1,7 +1,17 @@
 import * as React from 'react';
 import { VisualizationSettings } from '../../../entities/song/model/types';
-
-import {Box, Heading, Slider,Text, SliderFilledTrack, SliderThumb, SliderTrack, VStack} from "@chakra-ui/react";
+import {
+    Heading,
+    VStack,
+    FormControl,
+    FormLabel,
+    Slider,
+    SliderTrack,
+    SliderFilledTrack,
+    SliderThumb,
+    Text,
+    Box
+} from "@chakra-ui/react";
 
 interface VisualizationControlsProps {
     settings: VisualizationSettings;
@@ -9,90 +19,81 @@ interface VisualizationControlsProps {
 }
 
 const VisualizationControls: React.FC<VisualizationControlsProps> = ({ settings, onSettingsChange }) => {
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        onSettingsChange({ [name]: parseFloat(value) });
+    const handleChange = (name: string) => (value: number) => {
+        onSettingsChange({ [name]: value });
     };
 
     return (
-        <VStack className="visualization-controls" align={"start"} w={"100%"}>
-            <Heading>Visualization Settings</Heading>
-
-            {/* Similarity Threshold */}
-            <Box w={"100%"}>
-                <Text>Similarity Threshold:</Text>
+        <VStack spacing={4} align="stretch" w="100%">
+            <Heading size="md">Visualization Settings</Heading>
+            <FormControl>
+                <FormLabel htmlFor="similarityThreshold">Similarity Threshold</FormLabel>
                 <Slider
-                    aria-label='similarityThreshold'
-                    defaultValue={settings.similarityThreshold}
+                    id="similarityThreshold"
                     min={0}
                     max={1}
                     step={0.01}
-                    onChange={(value) => handleChange('similarityThreshold', value)}
+                    value={settings.similarityThreshold}
+                    onChange={handleChange('similarityThreshold')}
                 >
                     <SliderTrack>
                         <SliderFilledTrack />
                     </SliderTrack>
                     <SliderThumb />
                 </Slider>
-                <Text>{settings.similarityThreshold.toFixed(2)}</Text>
-            </Box>
-
-            {/* Max Connections */}
-            <Box>
-                <Text>Max Connections:</Text>
+                <Text mt={2}>{settings.similarityThreshold.toFixed(2)}</Text>
+            </FormControl>
+            <FormControl>
+                <FormLabel htmlFor="maxConnections">Max Connections</FormLabel>
                 <Slider
-                    aria-label='maxConnections'
-                    defaultValue={settings.maxConnections}
+                    id="maxConnections"
                     min={0}
                     max={100}
                     step={1}
-                    onChange={(value) => handleChange('maxConnections', value)}
+                    value={settings.maxConnections}
+                    onChange={handleChange('maxConnections')}
                 >
                     <SliderTrack>
                         <SliderFilledTrack />
                     </SliderTrack>
                     <SliderThumb />
                 </Slider>
-                <Text>{settings.maxConnections.toFixed(2)}</Text>
-            </Box>
-
-            {/* Node Size Scale */}
-            <Box>
-                <Text>Node Size Scale:</Text>
+                <Text mt={2}>{settings.maxConnections}</Text>
+            </FormControl>
+            <FormControl>
+                <FormLabel htmlFor="nodeSizeScale">Node Size Scale</FormLabel>
                 <Slider
-                    aria-label='nodeSizeScale'
-                    defaultValue={settings.nodeSizeScale}
+                    id="nodeSizeScale"
                     min={0.1}
                     max={2}
                     step={0.1}
-                    onChange={(value) => handleChange('nodeSizeScale', value)}
+                    value={settings.nodeSizeScale}
+                    onChange={handleChange('nodeSizeScale')}
                 >
                     <SliderTrack>
                         <SliderFilledTrack />
                     </SliderTrack>
                     <SliderThumb />
                 </Slider>
-                <Text>{settings.nodeSizeScale.toFixed(1)}</Text>
-            </Box>
-
-            {/* Edge Weight Scale */}
-            <Box>
-                <Text>Edge Weight Scale:</Text>
+                <Text mt={2}>{settings.nodeSizeScale.toFixed(1)}</Text>
+            </FormControl>
+            <FormControl>
+                <FormLabel htmlFor="edgeWeightScale">Edge Weight Scale</FormLabel>
                 <Slider
-                    aria-label='edgeWeightScale'
-                    defaultValue={settings.edgeWeightScale}
+                    id="edgeWeightScale"
                     min={0.1}
                     max={2}
                     step={0.1}
-                    onChange={(value) => handleChange('edgeWeightScale', value)}
+                    value={settings.edgeWeightScale}
+                    onChange={handleChange('edgeWeightScale')}
                 >
-                    <SliderTrack>
+                    <SliderTrack >
                         <SliderFilledTrack />
                     </SliderTrack>
                     <SliderThumb />
                 </Slider>
-                <Text>{settings.edgeWeightScale.toFixed(1)}</Text>
-            </Box>
+                <Text mt={2}>{settings.edgeWeightScale.toFixed(1)}</Text>
+            </FormControl>
         </VStack>
     );
 };

@@ -35,7 +35,7 @@ const MainPage: React.FC = () => {
     }
 
     return (
-        <Flex direction={"row"} justifyContent={"center"} w={"100%"} h={"100%"}>
+        <Flex direction={"row"} justifyContent={"center"} w={"100%"} h={"100%"} >
             <Flex className="main-page" direction={"column"} alignItems={"center"}>
                 <Heading>Spotify Song Similarity Analysis</Heading>
                 <VStack className="content">
