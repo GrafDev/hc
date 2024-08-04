@@ -1,7 +1,9 @@
 import * as React from 'react';
-import { Stage, Layer, Circle, Line, Group } from 'react-konva';
-import { SpotifySong, SongSimilarity, VisualizationSettings } from '../../../entities/song/model/types';
+import {Stage, Layer, Circle, Line, Group} from 'react-konva';
+import {SpotifySong, SongSimilarity, VisualizationSettings} from '../../../entities/song/model/types';
 import {useEffect, useState} from "react";
+import {Text} from "@chakra-ui/react";
+import {onceLog} from "../../../features/onceLog";
 
 interface SimilarityMapProps {
     songs: SpotifySong[];
@@ -23,7 +25,8 @@ interface Edge {
     weight: number;
 }
 
-const SimilarityMap: React.FC<SimilarityMapProps> = ({ songs, similarities, settings, onSongSelect }) => {
+
+const SimilarityMap: React.FC<SimilarityMapProps> = ({songs, similarities, settings, onSongSelect}) => {
     const [nodes, setNodes] = useState<Node[]>([]);
     const [edges, setEdges] = useState<Edge[]>([]);
 
@@ -36,13 +39,20 @@ const SimilarityMap: React.FC<SimilarityMapProps> = ({ songs, similarities, sett
             const streams = typeof song.streams === 'number' ? song.streams : 0;
             const nodeSizeScale = typeof settings.nodeSizeScale === 'number' ? settings.nodeSizeScale : 1;
 
+            // Проверка данных
+            console.log('streams:', streams, 'nodeSizeScale:', nodeSizeScale);
+
+            const radius = Math.max(5, 5 + (streams / 1e8) * nodeSizeScale);
+            console.log('calculated radius:', radius);
+
             return {
                 x: Math.random() * width,
                 y: Math.random() * height,
-                radius: Math.max(5, 5 + (streams / 1e8) * nodeSizeScale),
-                song: song
+                radius,
+                song
             };
         });
+
 
         // Create edges
         const newEdges: Edge[] = [];
@@ -71,30 +81,32 @@ const SimilarityMap: React.FC<SimilarityMapProps> = ({ songs, similarities, sett
     }, [songs, similarities, settings]);
 
     return (
-        <Stage width={800} height={600}>
-            <Layer>
-                {edges.map((edge, index) => (
-                    <Line
-                        key={index}
-                        points={[edge.source.x, edge.source.y, edge.target.x, edge.target.y]}
-                        stroke="black"
-                        strokeWidth={edge.weight}
-                        opacity={0.5}
-                    />
-                ))}
-                {nodes.map((node, index) => (
-                    <Group key={index}>
-                        <Circle
-                            x={node.x}
-                            y={node.y}
-                            radius={node.radius}
-                            fill="blue"
-                            onClick={() => onSongSelect(node.song)}
+            <Stage width={800} height={600} style={{border: '1px solid black', borderRadius: '5px' }} >
+                <Layer>
+                    {edges.map((edge, index) => (
+                        <Line
+                            key={index}
+                            points={[edge.source.x, edge.source.y, edge.target.x, edge.target.y]}
+                            stroke="black"
+                            strokeWidth={edge.weight}
+                            opacity={0.5}
                         />
-                    </Group>
-                ))}
-            </Layer>
-        </Stage>
+                    ))}
+                    {nodes.map((node, index) => (
+                        <Group key={index}>
+                            <Circle
+                                style={{cursor: 'pointer'}}
+                                x={node.x}
+                                y={node.y}
+                                radius={node.radius}
+
+                                fill="blue"
+                                onClick={() => onSongSelect(node.song)}
+                           />
+                        </Group>
+                    ))}
+                </Layer>
+            </Stage>
     );
 };
 

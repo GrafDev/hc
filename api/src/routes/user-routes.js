@@ -11,5 +11,10 @@ routerAPI.get('/file',(req,res)=>{
   const route=FileControllers.readFile(req,res)
   return route
 })
+routerAPI.get('/short-file',(req,res)=>{
+  console.log("RouterAPI ShortFile")
+  const route=FileControllers.readShortFile(req,res)
+  return route
+})
 
 export default routerAPI;
