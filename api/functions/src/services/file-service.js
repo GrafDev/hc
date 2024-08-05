@@ -1,6 +1,6 @@
-import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { promises as fs } from 'fs';
 
 class FileService {
   async readFile(filename) {
@@ -8,11 +8,15 @@ class FileService {
       const __filename = fileURLToPath(import.meta.url);
       const __dirname = path.dirname(__filename);
       const filePath = path.join(__dirname, '..', 'data', filename);
+
+      // Проверяем существование файла
+      await fs.access(filePath);
+
       const fileContent = await fs.readFile(filePath, 'utf-8');
       return fileContent;
     } catch (error) {
-      console.error(error);
-      throw new Error('Error reading file');
+      console.error('Error reading file:', error);
+      throw new Error(`Error reading file: ${error.message}`);
     }
   }
 }

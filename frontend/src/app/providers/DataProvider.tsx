@@ -39,7 +39,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({children}) => {
             try {
                 setLoading(true);
 
-                const apiUrl = 'https://l24w629902.execute-api.eu-north-1.amazonaws.com/prod/file';
+                const apiUrl = 'https://us-central1-hunter-corp-sa.cloudfunctions.net/api/short-file';
 
                 // Получение содержимого файла
                 const response = await axios.get(apiUrl);

@@ -1,7 +1,7 @@
 import * as functions from 'firebase-functions';
 import express from 'express';
+import routerAPI from './src/routes/routes.js'
 import cors from 'cors';
-import routerAPI from '../src/routes/routes.js'
 
 const app = express();
 
