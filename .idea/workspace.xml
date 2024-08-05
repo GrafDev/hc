@@ -5,25 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="39ec2c1b-fe7b-42d2-b232-b35ae80379be" name="Changes" comment="q">
+      <change beforePath="$PROJECT_DIR$/.idea/hc.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/hc.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/.eslintrc.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/api/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/Dockerfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/firebase.json" beforeDir="false" afterPath="$PROJECT_DIR$/api/firebase.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/functions/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/functions/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/functions/package-lock.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/functions/package.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/api/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/api/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/api/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/controllers/file-controllers.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/data/Most Streamed Spotify Songs 2024-short.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/data/Most Streamed Spotify Songs 2024.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/entities/constants.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/routes/data-routes.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/routes/user-routes.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/services/file-service.js" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,7 +25,16 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="c68f8d13526e2dea684f7a62ea74370a0ddaf16d" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="MIXED" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
@@ -61,6 +55,8 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
+    "javascript.nodejs.core.library.configured.version": "20.12.2",
+    "javascript.nodejs.core.library.typings.version": "20.12.14",
     "last_opened_file_path": "C:/Users/gregy/WebstormProjects/hc/api/functions",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.standard": "true",
@@ -83,7 +79,7 @@
       <recent name="C:\Users\gregy\WebstormProjects\hc\api\functions" />
     </key>
   </component>
-  <component name="RunManager" selected="npm.dev">
+  <component name="RunManager" selected="Node.js.index.js">
     <configuration name="index.js" type="NodeJSConfigurationType" nameIsGenerated="true" path-to-js-file="index.js" working-dir="$PROJECT_DIR$/api">
       <method v="2" />
     </configuration>
@@ -121,7 +117,9 @@
       <workItem from="1722853535041" duration="939000" />
       <workItem from="1722854503821" duration="4202000" />
       <workItem from="1722861160573" duration="10572000" />
-      <workItem from="1722875569524" duration="772000" />
+      <workItem from="1722875569524" duration="1771000" />
+      <workItem from="1722878373301" duration="1000" />
+      <workItem from="1722878382076" duration="837000" />
     </task>
     <task id="LOCAL-00001" summary="q">
       <option name="closed" value="true" />
@@ -147,11 +145,30 @@
       <option name="project" value="LOCAL" />
       <updated>1722855117179</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="q">
+      <option name="closed" value="true" />
+      <created>1722876345877</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1722876345877</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="q" />
