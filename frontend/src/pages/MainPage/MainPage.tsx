@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import * as React from 'react';
 import { SpotifySong, VisualizationSettings } from '../../entities/song/model/types';
+
 import {
     Card,
     Flex, FormControl, FormLabel, Heading,
@@ -13,9 +14,9 @@ import {
     VStack
 } from "@chakra-ui/react";
 import { useData } from "../../app/providers/DataProvider";
-import SimilarityMap from "../../widgets/SimilarityMap/ui/SimilarityMap";
 import VisualizationControls from "../../widgets/VisualizationControls/ui/VisualizationControls";
 import SongInfo from "../../widgets/SongInfo/ui/SongInfo";
+import MemoizedSimilarityMap from "../../widgets/SimilarityMap/ui/SimilarityMap";
 
 const MainPage: React.FC = () => {
     const { songs, similarities, loading, error } = useData();
@@ -70,7 +71,7 @@ const MainPage: React.FC = () => {
                 </Flex>
                 <VStack className="content" h={"100%"}>
                     <Card className="visualization-container" p={2} gap={4} h={"100%"}>
-                        <SimilarityMap
+                        <MemoizedSimilarityMap
                             songs={limitedSongs}
                             similarities={similarities!}
                             settings={visualizationSettings}
