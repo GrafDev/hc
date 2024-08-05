@@ -4,20 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="39ec2c1b-fe7b-42d2-b232-b35ae80379be" name="Changes" comment="q">
-      <change afterPath="$PROJECT_DIR$/api/functions/src/controllers/message-controller.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/functions/src/services/message-service.js" afterDir="false" />
+    <list default="true" id="39ec2c1b-fe7b-42d2-b232-b35ae80379be" name="Changes" comment="Server is ready">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/functions/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/functions/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/functions/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/api/functions/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/functions/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/api/functions/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/controllers/file-controllers.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/functions/src/controllers/file-controllers.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/data/Most Streamed Spotify Songs 2024-short.csv" beforeDir="false" afterPath="$PROJECT_DIR$/api/functions/src/data/Most Streamed Spotify Songs 2024-short.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/data/Most Streamed Spotify Songs 2024.csv" beforeDir="false" afterPath="$PROJECT_DIR$/api/functions/src/data/Most Streamed Spotify Songs 2024.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/entities/constants.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/functions/src/entities/constants.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/routes/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/functions/src/routes/routes.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/services/file-service.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/functions/src/services/file-service.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/providers/DataProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/providers/DataProvider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.firebase/hosting.ZGlzdA.cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.firebaserc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/dist/assets/index-BYcO3hR0.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/dist/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/dist/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/firebase.json" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,7 +59,7 @@
     "ignore.virus.scanning.warn.message": "true",
     "javascript.nodejs.core.library.configured.version": "20.12.2",
     "javascript.nodejs.core.library.typings.version": "20.12.14",
-    "last_opened_file_path": "C:/Users/gregy/WebstormProjects/hc/api/functions/src/routes",
+    "last_opened_file_path": "C:/Users/gregy/WebstormProjects/hc/frontend/package.json",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.standard": "true",
     "node.js.detected.package.tslint": "true",
@@ -74,6 +67,7 @@
     "node.js.selected.package.standard": "",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "npm.build.executor": "Run",
     "npm.dev.executor": "Run",
     "run.code.analysis.last.selected.profile": "pProject Default",
     "ts.external.directory.path": "C:\\Users\\gregy\\WebstormProjects\\hc\\frontend\\node_modules\\typescript\\lib",
@@ -89,8 +83,18 @@
       <recent name="C:\Users\gregy\WebstormProjects\hc\api\functions" />
     </key>
   </component>
-  <component name="RunManager" selected="npm.dev">
+  <component name="RunManager" selected="npm.build">
     <configuration name="index.js" type="NodeJSConfigurationType" nameIsGenerated="true" path-to-js-file="index.js" working-dir="$PROJECT_DIR$/api">
+      <method v="2" />
+    </configuration>
+    <configuration name="build" type="js.build_tools.npm" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/frontend/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="build" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
       <method v="2" />
     </configuration>
     <configuration name="dev" type="js.build_tools.npm" nameIsGenerated="true">
@@ -106,6 +110,7 @@
     <list>
       <item itemvalue="Node.js.index.js" />
       <item itemvalue="npm.dev" />
+      <item itemvalue="npm.build" />
     </list>
   </component>
   <component name="SharedIndexes">
@@ -129,7 +134,8 @@
       <workItem from="1722861160573" duration="10572000" />
       <workItem from="1722875569524" duration="1771000" />
       <workItem from="1722878373301" duration="1000" />
-      <workItem from="1722878382076" duration="4471000" />
+      <workItem from="1722878382076" duration="4644000" />
+      <workItem from="1722887548433" duration="949000" />
     </task>
     <task id="LOCAL-00001" summary="q">
       <option name="closed" value="true" />
@@ -171,7 +177,15 @@
       <option name="project" value="LOCAL" />
       <updated>1722879501712</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Server is ready">
+      <option name="closed" value="true" />
+      <created>1722882926954</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1722882926954</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -190,6 +204,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="q" />
-    <option name="LAST_COMMIT_MESSAGE" value="q" />
+    <MESSAGE value="Server is ready" />
+    <option name="LAST_COMMIT_MESSAGE" value="Server is ready" />
   </component>
 </project>
