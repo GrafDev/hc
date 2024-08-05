@@ -3,12 +3,12 @@ import * as React from 'react';
 import { SpotifySong, VisualizationSettings } from '../../entities/song/model/types';
 import {
     Card,
-    Flex,
-    Heading,
+    Flex, FormControl, FormLabel, Heading,
+    HStack,
     Modal, ModalBody, ModalCloseButton,
     ModalContent,
     ModalHeader,
-    ModalOverlay,
+    ModalOverlay, Slider, SliderFilledTrack, SliderThumb, SliderTrack, Switch, Text, useBreakpointValue, useColorMode,
     useDisclosure,
     VStack
 } from "@chakra-ui/react";
@@ -20,25 +20,32 @@ import SongInfo from "../../widgets/SongInfo/ui/SongInfo";
 const MainPage: React.FC = () => {
     const { songs, similarities, loading, error } = useData();
     const [selectedSong, setSelectedSong] = useState<SpotifySong | null>(null);
+    const {colorMode, toggleColorMode} = useColorMode();
+    const isMobile = useBreakpointValue({ base: true, xl: false });
     const [visualizationSettings, setVisualizationSettings] = useState<VisualizationSettings>({
         similarityThreshold: 0.7,
         maxConnections: 50,
         nodeSizeScale: 1,
         edgeWeightScale: 1,
     });
+    const [songCount, setSongCount] = useState(6); // Начальное значение количества песен
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const handleSongSelect = (song: SpotifySong) => {
-        // console.log(song)
         onOpen();
         setSelectedSong(song);
     };
+
     const handleClose = () => {
         onClose();
     };
 
     const handleSettingsChange = (newSettings: Partial<VisualizationSettings>) => {
         setVisualizationSettings(prevSettings => ({ ...prevSettings, ...newSettings }));
+    };
+
+    const handleSongCountChange = (value: number) => {
+        setSongCount(value);
     };
 
     if (loading) {
@@ -49,24 +56,53 @@ const MainPage: React.FC = () => {
         return <div>Error: {error}</div>;
     }
 
+    // Ограничиваем количество песен для отображения
+    const limitedSongs = songs.slice(0, songCount);
     return (
-        <Flex direction={"row"} justifyContent={"center"} w={"100%"} h={"100%"} >
-            <Flex className="main-page" direction={"column"} alignItems={"center"} gap={4}>
-                <Heading >Spotify Song Similarity Analysis</Heading>
-                <VStack className="content">
-                    <Card className="visualization-container" p={2} gap={4}>
+        <Flex direction={"row"} gap={8} justifyContent={"center"} w={"100%"} h={"90dvh"} >
+            <Flex className="main-page" direction={"column"} alignItems={"center"} h={"100%"}>
+                <Flex alignItems={"center"} gap={4} p={3} justifyContent={"space-between"} w={"100%"}>
+                <Heading size={["md", "lg"]} fontWeight={"bold"} >Spotify Song Similarity Analysis</Heading>
+                    <HStack>
+                    <Text>{colorMode}</Text>
+                    <Switch size={["sm", "md"]} onChange={toggleColorMode} />
+                    </HStack>
+                </Flex>
+                <VStack className="content" h={"100%"}>
+                    <Card className="visualization-container" p={2} gap={4} h={"100%"}>
                         <SimilarityMap
-                            songs={songs}
+                            songs={limitedSongs}
                             similarities={similarities!}
                             settings={visualizationSettings}
                             onSongSelect={handleSongSelect}
                         />
+                        <FormControl px={4}>
+                            <Flex justifyContent={"space-between"} px={4}>
+                                <FormLabel htmlFor="songCount">Number of songs to analyze</FormLabel>
+                                <Text fontWeight={"bold"} fontSize={"lg"}>{songCount}</Text>
+                            </Flex>
+                            <Slider
+                                id="songCount"
+                                min={1}
+                                max={songs.length}
+                                step={1}
+                                value={songCount}
+                                onChange={handleSongCountChange}
+                            >
+                                <SliderTrack>
+                                    <SliderFilledTrack />
+                                </SliderTrack>
+                                <SliderThumb />
+                            </Slider>
+                        </FormControl>
+                        <Flex direction={"column"} justifyContent={"center"} h={"100%"}>
                         <VisualizationControls
                             settings={visualizationSettings}
                             onSettingsChange={handleSettingsChange}
                         />
+                        </Flex>
                     </Card>
-                    <Modal isOpen={isOpen} onClose={handleClose}>
+                    <Modal isOpen={!!(isOpen && isMobile)} onClose={handleClose} useInert={isMobile}>
                         <ModalOverlay />
                         <ModalContent>
                             <ModalHeader>Song Information</ModalHeader>
@@ -85,6 +121,20 @@ const MainPage: React.FC = () => {
                     </Modal>
                 </VStack>
             </Flex>
+
+            { !isMobile &&
+                <Card w={"30%"}>
+                    {selectedSong ? (
+                        <SongInfo
+                            song={selectedSong}
+                            similarSongs={similarities ? similarities[selectedSong.Track] : {}}
+                        />
+                    ) : (
+                        <div>No song selected</div>
+                    )}
+                </Card>
+            }
+
         </Flex>
     );
 };

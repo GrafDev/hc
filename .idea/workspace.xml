@@ -4,13 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="39ec2c1b-fe7b-42d2-b232-b35ae80379be" name="Changes" comment="Server is ready">
+    <list default="true" id="39ec2c1b-fe7b-42d2-b232-b35ae80379be" name="Changes" comment="Front is ok.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/.firebase/hosting.ZGlzdA.cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/.firebaserc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/dist/assets/index-BYcO3hR0.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/dist/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/dist/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/firebase.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/providers/ChakraProviderOptions.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/providers/ChakraProviderOptions.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/providers/DataProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/providers/DataProvider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/MainPage/MainPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/MainPage/MainPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/widgets/SimilarityMap/ui/SimilarityMap.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/widgets/SimilarityMap/ui/SimilarityMap.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/widgets/SongInfo/ui/SongInfo.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/widgets/SongInfo/ui/SongInfo.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/widgets/VisualizationControls/ui/VisualizationControls.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/widgets/VisualizationControls/ui/VisualizationControls.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,10 +84,12 @@
       <recent name="C:\Users\gregy\WebstormProjects\hc\api\functions" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\gregy\WebstormProjects\hc\frontend\src\shared\ui\assets" />
+      <recent name="C:\Users\gregy\WebstormProjects\hc\frontend\src\shared\ui" />
       <recent name="C:\Users\gregy\WebstormProjects\hc\api\functions" />
     </key>
   </component>
-  <component name="RunManager" selected="npm.build">
+  <component name="RunManager" selected="npm.dev">
     <configuration name="index.js" type="NodeJSConfigurationType" nameIsGenerated="true" path-to-js-file="index.js" working-dir="$PROJECT_DIR$/api">
       <method v="2" />
     </configuration>
@@ -135,7 +141,7 @@
       <workItem from="1722875569524" duration="1771000" />
       <workItem from="1722878373301" duration="1000" />
       <workItem from="1722878382076" duration="4644000" />
-      <workItem from="1722887548433" duration="949000" />
+      <workItem from="1722887548433" duration="5966000" />
     </task>
     <task id="LOCAL-00001" summary="q">
       <option name="closed" value="true" />
@@ -185,7 +191,15 @@
       <option name="project" value="LOCAL" />
       <updated>1722882926954</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Front is ok.">
+      <option name="closed" value="true" />
+      <created>1722889090092</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1722889090093</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -205,6 +219,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="q" />
     <MESSAGE value="Server is ready" />
-    <option name="LAST_COMMIT_MESSAGE" value="Server is ready" />
+    <MESSAGE value="Front is ok." />
+    <option name="LAST_COMMIT_MESSAGE" value="Front is ok." />
   </component>
 </project>

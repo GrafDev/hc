@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {ChakraProvider, extendTheme} from "@chakra-ui/react";
+import {ChakraBaseProvider,extendTheme} from "@chakra-ui/react";
 import {ReactNode} from "react";
 
 interface ProvidersProps {
@@ -10,7 +10,7 @@ const _theme = extendTheme({
     components: {
         Heading: {
             baseStyle: {
-                fontSize: '4xl',
+                fontSize: 'lg',
             },
         },
         Slider: {
@@ -43,8 +43,8 @@ const _theme = extendTheme({
 })
 export const ChakraProviderOptions: React.FC<ProvidersProps> = ({ children }) => {
     return (
-        <ChakraProvider resetCSS={true} theme={_theme}>
+        <ChakraBaseProvider resetCSS={true} theme={_theme}>
                 {children}
-        </ChakraProvider>
+        </ChakraBaseProvider>
     );
 };

@@ -1,7 +1,6 @@
-import * as React from 'react';
-import {Stage, Layer, Circle, Line, Group} from 'react-konva';
-import {SpotifySong, SongSimilarity, VisualizationSettings} from '../../../entities/song/model/types';
-import {useEffect, useState} from "react";
+import React, { useRef, useEffect } from 'react';
+import * as PIXI from 'pixi.js';
+import { SpotifySong, SongSimilarity, VisualizationSettings } from '../../../entities/song/model/types';
 
 interface SimilarityMapProps {
     songs: SpotifySong[];
@@ -10,102 +9,80 @@ interface SimilarityMapProps {
     onSongSelect: (song: SpotifySong) => void;
 }
 
-interface Node {
-    x: number;
-    y: number;
-    radius: number;
+interface SongNode extends PIXI.Graphics {
     song: SpotifySong;
 }
 
-interface Edge {
-    source: Node;
-    target: Node;
-    weight: number;
-}
-
-
-const SimilarityMap: React.FC<SimilarityMapProps> = ({songs, similarities, settings, onSongSelect}) => {
-    const [nodes, setNodes] = useState<Node[]>([]);
-    const [edges, setEdges] = useState<Edge[]>([]);
+const SimilarityMap: React.FC<SimilarityMapProps> = ({ songs, similarities, settings, onSongSelect }) => {
+    const canvasRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(() => {
-        const width = 800;
-        const height = 600;
+        if (!songs.length || !canvasRef.current) return;
 
-        // Create nodes
-        const newNodes = songs.map((song) => {
-            const streams = typeof song.Pandora_Streams === 'number' ? song.Pandora_Streams : 0;
-            const nodeSizeScale = typeof settings.nodeSizeScale === 'number' ? settings.nodeSizeScale : 1;
-
-            // Проверка данных
-            // console.log('streams:', streams, 'nodeSizeScale:', nodeSizeScale);
-
-            const radius = Math.max(5, 5 + (streams / 1e8) * nodeSizeScale);
-            // console.log('calculated radius:', radius);
-
-            return {
-                x: Math.random() * width,
-                y: Math.random() * height,
-                radius,
-                song
-            };
+        const app = new PIXI.Application({
+            width: 800,
+            height: 600,
+            backgroundColor: 0xffffff,
+            view: canvasRef.current
         });
 
+        const container = new PIXI.Container();
+        app.stage.addChild(container);
 
-        // Create edges
-        const newEdges: Edge[] = [];
-        for (let i = 0; i < newNodes.length; i++) {
-            const sourceSimilarities = similarities[newNodes[i].song.Track];
-            if (!sourceSimilarities) continue;
+        const nodeMap = new Map<string, SongNode>();
 
-            Object.entries(sourceSimilarities)
-                .filter(([, similarity]) => similarity >= settings.similarityThreshold)
-                .sort(([, a], [, b]) => b - a)
-                .slice(0, settings.maxConnections)
-                .forEach(([targetTrack, similarity]) => {
-                    const targetNode = newNodes.find(node => node.song.Track === targetTrack);
-                    if (targetNode) {
-                        newEdges.push({
-                            source: newNodes[i],
-                            target: targetNode,
-                            weight: similarity * settings.edgeWeightScale
-                        });
-                    }
-                });
-        }
+        songs.forEach((song: SpotifySong) => {
+            const circle = new PIXI.Graphics() as SongNode;
+            circle.song = song;
+            circle.beginFill(0x0000ff);
+            circle.drawCircle(0, 0, Math.sqrt(song.Pandora_Streams || 0) * 0.01);
+            circle.endFill();
+            circle.x = Math.random() * app.screen.width;
+            circle.y = Math.random() * app.screen.height;
+            circle.eventMode = 'static';
+            circle.cursor = 'pointer';
+            circle.on('pointerdown', () => onSongSelect(song));
+            container.addChild(circle);
+            nodeMap.set(song.Track, circle);
+        });
 
-        setNodes(newNodes);
-        setEdges(newEdges);
-    }, [songs, similarities, settings]);
+        songs.forEach(song => {
+            const sourceNode = nodeMap.get(song.Track);
+            if (!sourceNode) return;
 
-    return (
-            <Stage width={800} height={600} style={{border: '1px solid black', borderRadius: '5px' }} >
-                <Layer>
-                    {edges.map((edge, index) => (
-                        <Line
-                            key={index}
-                            points={[edge.source.x, edge.source.y, edge.target.x, edge.target.y]}
-                            stroke="black"
-                            strokeWidth={edge.weight}
-                            opacity={0.5}
-                        />
-                    ))}
-                    {nodes.map((node, index) => (
-                        <Group key={index}>
-                            <Circle
-                                style={{cursor: 'pointer'}}
-                                x={node.x}
-                                y={node.y}
-                                radius={node.radius}
+            const similarSongs = similarities[song.Track];
+            if (similarSongs) {
+                Object.entries(similarSongs)
+                    .filter(([, strength]) => strength >= settings.similarityThreshold)
+                    .sort(([, a], [, b]) => b - a)
+                    .slice(0, settings.maxConnections)
+                    .forEach(([targetTrack, strength]) => {
+                        const targetNode = nodeMap.get(targetTrack);
+                        if (targetNode) {
+                            const line = new PIXI.Graphics();
+                            line.lineStyle(strength * settings.edgeWeightScale, 0x999999, 0.6);
+                            line.moveTo(sourceNode.x, sourceNode.y);
+                            line.lineTo(targetNode.x, targetNode.y);
+                            container.addChild(line);
+                        }
+                    });
+            }
+        });
 
-                                fill="blue"
-                                onClick={() => onSongSelect(node.song)}
-                           />
-                        </Group>
-                    ))}
-                </Layer>
-            </Stage>
-    );
+        // Добавляем простую анимацию
+        app.ticker.add(() => {
+            nodeMap.forEach(node => {
+                node.x += (Math.random() - 0.5) * 0.5;
+                node.y += (Math.random() - 0.5) * 0.5;
+            });
+        });
+
+        return () => {
+            app.destroy(true, { children: true, texture: true });
+        };
+    }, [songs, similarities, settings, onSongSelect]);
+
+    return <canvas ref={canvasRef}></canvas>;
 };
 
 export default SimilarityMap;
