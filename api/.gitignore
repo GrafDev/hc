@@ -1,5 +1,5 @@
-node_modules\
-functions\
+/node_modules/
+/functions\
 *.local
 /node_modules/.bin/acorn
 /node_modules/.bin/acorn.cmd
