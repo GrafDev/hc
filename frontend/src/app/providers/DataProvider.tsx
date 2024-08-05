@@ -1,9 +1,9 @@
-import  { createContext, useState, useContext, ReactNode, useEffect } from 'react';
+import {createContext, useState, useContext, ReactNode, useEffect} from 'react';
 import * as React from 'react';
 import {SpotifySong, SongSimilarity, SimilarityMetric} from '../../entities/song/model/types';
-import { parseSpotifyCSV } from '../../shared/lib/csvParser';
-import { calculateSimilarity } from '../../features/calculateSimilarity/lib/calculateSimilarity';
-import axios from 'axios';
+import {parseSpotifyCSV} from '../../shared/lib/csvParser';
+import {calculateSimilarity} from '../../features/calculateSimilarity/lib/calculateSimilarity';
+import axios from "axios";
 
 interface DataContextType {
     songs: SpotifySong[];
@@ -11,7 +11,6 @@ interface DataContextType {
     loading: boolean;
     error: string | null;
 }
-
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
@@ -27,29 +26,36 @@ interface DataProviderProps {
     children: ReactNode;
 }
 
-export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
+export const DataProvider: React.FC<DataProviderProps> = ({children}) => {
     const [songs, setSongs] = useState<SpotifySong[]>([]);
     const [similarities, setSimilarities] = useState<SongSimilarity>({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        const metric:SimilarityMetric = 'levenshtein';
+        const metric: SimilarityMetric = 'jaccard';
+
         const fetchData = async () => {
             try {
                 setLoading(true);
 
-                // Получение CSV данных с сервера
-                const response = await axios.get('http://localhost:5512/file');
+                const apiUrl = 'https://l24w629902.execute-api.eu-north-1.amazonaws.com/prod/file';
+
+                // Получение содержимого файла
+                const response = await axios.get(apiUrl);
                 const csvText = response.data;
+
+                console.log("Start get csvText");
 
                 // Парсинг CSV
                 const parsedSongs = await parseSpotifyCSV(csvText);
                 setSongs(parsedSongs);
+                console.log("parsedSongs", parsedSongs);
 
                 // Расчет сходства
-                const calculatedSimilarities = calculateSimilarity(parsedSongs, metric );
+                const calculatedSimilarities = calculateSimilarity(parsedSongs, metric);
                 setSimilarities(calculatedSimilarities);
+                console.log("similarities", calculatedSimilarities);
             } catch (err) {
                 setError('Error loading or processing data');
                 console.error(err);
@@ -62,7 +68,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
     }, []);
 
     return (
-        <DataContext.Provider value={{ songs, similarities, loading, error }}>
+        <DataContext.Provider value={{songs, similarities, loading, error}}>
             {children}
         </DataContext.Provider>
     );

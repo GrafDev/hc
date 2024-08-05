@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "proxy": "https://l24w629902.execute-api.eu-north-1.amazonaws.com",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -14,14 +15,16 @@
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",
     "@types/papaparse": "^5.3.14",
+    "axios": "^1.7.3",
+    "express": "^4.19.2",
     "firebase": "^10.12.5",
+    "firebase-functions": "^5.0.1",
     "framer-motion": "^11.3.21",
     "konva": "^9.3.14",
     "papaparse": "^5.4.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-konva": "^18.2.10",
-    "axios": "^1.7.3"
+    "react-konva": "^18.2.10"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",

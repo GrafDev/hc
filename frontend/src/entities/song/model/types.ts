@@ -1,29 +1,5 @@
 // src/entities/song/model/types.ts
 
-export interface SpotifySong {
-    track_name: string;
-    artist_name: string;
-    artist_count: number;
-    released_year: number;
-    released_month: number;
-    released_day: number;
-    in_spotify_playlists: number;
-    in_spotify_charts: number;
-    streams: number;
-    spotify_url: string;
-    danceability: number;
-    energy: number;
-    key: number;
-    loudness: number;
-    mode: number;
-    speechiness: number;
-    acousticness: number;
-    instrumentalness: number;
-    liveness: number;
-    valence: number;
-    tempo: number;
-    duration_ms: number;
-}
 
 export interface SongNode {
     id: string;

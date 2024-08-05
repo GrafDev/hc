@@ -2,8 +2,6 @@ import * as React from 'react';
 import {Stage, Layer, Circle, Line, Group} from 'react-konva';
 import {SpotifySong, SongSimilarity, VisualizationSettings} from '../../../entities/song/model/types';
 import {useEffect, useState} from "react";
-import {Text} from "@chakra-ui/react";
-import {onceLog} from "../../../features/onceLog";
 
 interface SimilarityMapProps {
     songs: SpotifySong[];
@@ -36,14 +34,14 @@ const SimilarityMap: React.FC<SimilarityMapProps> = ({songs, similarities, setti
 
         // Create nodes
         const newNodes = songs.map((song) => {
-            const streams = typeof song.streams === 'number' ? song.streams : 0;
+            const streams = typeof song.Pandora_Streams === 'number' ? song.Pandora_Streams : 0;
             const nodeSizeScale = typeof settings.nodeSizeScale === 'number' ? settings.nodeSizeScale : 1;
 
             // Проверка данных
-            console.log('streams:', streams, 'nodeSizeScale:', nodeSizeScale);
+            // console.log('streams:', streams, 'nodeSizeScale:', nodeSizeScale);
 
             const radius = Math.max(5, 5 + (streams / 1e8) * nodeSizeScale);
-            console.log('calculated radius:', radius);
+            // console.log('calculated radius:', radius);
 
             return {
                 x: Math.random() * width,
@@ -57,15 +55,15 @@ const SimilarityMap: React.FC<SimilarityMapProps> = ({songs, similarities, setti
         // Create edges
         const newEdges: Edge[] = [];
         for (let i = 0; i < newNodes.length; i++) {
-            const sourceSimilarities = similarities[newNodes[i].song.spotify_url];
+            const sourceSimilarities = similarities[newNodes[i].song.Track];
             if (!sourceSimilarities) continue;
 
             Object.entries(sourceSimilarities)
                 .filter(([, similarity]) => similarity >= settings.similarityThreshold)
                 .sort(([, a], [, b]) => b - a)
                 .slice(0, settings.maxConnections)
-                .forEach(([targetUrl, similarity]) => {
-                    const targetNode = newNodes.find(node => node.song.spotify_url === targetUrl);
+                .forEach(([targetTrack, similarity]) => {
+                    const targetNode = newNodes.find(node => node.song.Track === targetTrack);
                     if (targetNode) {
                         newEdges.push({
                             source: newNodes[i],

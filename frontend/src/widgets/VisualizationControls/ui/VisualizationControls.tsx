@@ -10,7 +10,6 @@ import {
     SliderFilledTrack,
     SliderThumb,
     Text,
-    Box
 } from "@chakra-ui/react";
 
 interface VisualizationControlsProps {

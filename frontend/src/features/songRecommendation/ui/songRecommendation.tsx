@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import * as React from 'react';
 import { SpotifySong, SongSimilarity } from '../../../entities/song/model/types';
 import "./songRecommendation.css"
 
@@ -18,11 +19,11 @@ const SongRecommendation: React.FC<SongRecommendationProps> = ({
     const [recommendations, setRecommendations] = useState<SpotifySong[]>([]);
 
     useEffect(() => {
-        if (selectedSong && similarities[selectedSong.spotify_url]) {
-            const similarSongs = Object.entries(similarities[selectedSong.spotify_url])
+        if (selectedSong && similarities[selectedSong.Track]) {
+            const similarSongs = Object.entries(similarities[selectedSong.Track])
                 .sort(([, a], [, b]) => b - a)
                 .slice(0, 5)
-                .map(([url]) => songs.find(song => song.spotify_url === url))
+                .map(([Track]) => songs.find(song => song.Track=== Track))
                 .filter((song): song is SpotifySong => !!song);
 
             setRecommendations(similarSongs);
@@ -41,9 +42,9 @@ const SongRecommendation: React.FC<SongRecommendationProps> = ({
             {recommendations.length > 0 ? (
                 <ul>
                     {recommendations.map((song) => (
-                        <li key={song.spotify_url}>
+                        <li key={song.Track}>
                             <button onClick={() => onSongSelect(song)}>
-                                {song.track_name} - {song.artist_name}
+                                {song.Track} - {song.Artist}
                             </button>
                         </li>
                     ))}

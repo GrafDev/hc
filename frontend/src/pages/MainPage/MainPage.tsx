@@ -75,7 +75,7 @@ const MainPage: React.FC = () => {
                                 {selectedSong ? (
                                     <SongInfo
                                         song={selectedSong}
-                                        similarSongs={similarities ? similarities[selectedSong.spotify_url] : {}}
+                                        similarSongs={similarities ? similarities[selectedSong.Track] : {}}
                                     />
                                 ) : (
                                     <div>No song selected</div>
