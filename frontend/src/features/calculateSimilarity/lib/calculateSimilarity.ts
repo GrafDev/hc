@@ -136,11 +136,11 @@ function normalizeSongFeatures(songs: SpotifySong[]): number[][] {
     return normalizedFeatures[0].map((_, i) => normalizedFeatures.map(f => f[i]));
 }
 
-export function calculateSimilarity(songs: SpotifySong[], metric: SimilarityMetric): SongSimilarity {
+export function calculateSimilarity(songs: SpotifySong[], metric: SimilarityMetric, topN: number = 5): SongSimilarity {
     const normalizedFeatures = normalizeSongFeatures(songs);
     const similarity: SongSimilarity = {};
     for (let i = 0; i < songs.length; i++) {
-        similarity[songs[i].Track] = {};
+        const similarities: { track: string; value: number }[] = [];
         for (let j = 0; j < songs.length; j++) {
             if (i !== j) {
                 let similarityValue: number;
@@ -165,9 +165,13 @@ export function calculateSimilarity(songs: SpotifySong[], metric: SimilarityMetr
                     console.error(`Error calculating similarity for songs ${i} and ${j}:`, error);
                     similarityValue = 0;
                 }
-                similarity[songs[i].Track][songs[j].Track] = similarityValue;
+                similarities.push({ track: songs[j].Track, value: similarityValue });
             }
         }
+        similarities.sort((a, b) => b.value - a.value);
+        similarity[songs[i].Track] = Object.fromEntries(
+            similarities.slice(0, topN).map(s => [s.track, s.value])
+        );
     }
 
     return similarity;

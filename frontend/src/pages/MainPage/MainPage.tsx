@@ -24,7 +24,7 @@ const MainPage: React.FC = () => {
     const {colorMode, toggleColorMode} = useColorMode();
     const isMobile = useBreakpointValue({ base: true, xl: false });
     const [visualizationSettings, setVisualizationSettings] = useState<VisualizationSettings>({
-        similarityThreshold: 0.16,
+        similarityThreshold: 0.50,
         maxConnections: 15,
         nodeSizeScale: 0.4,
         edgeWeightScale: 0.4,

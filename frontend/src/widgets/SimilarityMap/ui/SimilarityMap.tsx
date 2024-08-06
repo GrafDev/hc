@@ -13,12 +13,6 @@ interface SimilarityMapProps {
     onSongSelect: (song: SpotifySong) => void;
 }
 
-interface Cluster {
-    id: number;
-    centroid: { x: number; y: number };
-    nodes: Node[];
-}
-
 interface Node {
     x: number;
     y: number;
@@ -32,18 +26,27 @@ interface Edge {
     weight: number;
 }
 
+interface Cluster {
+    id: number;
+    centroid: { x: number; y: number };
+    nodes: Node[];
+}
+
 const SimilarityMap: React.FC<SimilarityMapProps> = ({ songs, similarities, settings, onSongSelect }) => {
     const [nodes, setNodes] = useState<Node[]>([]);
     const [edges, setEdges] = useState<Edge[]>([]);
+    const [clusters, setClusters] = useState<Cluster[]>([]);
     const [scale, setScale] = useState(1);
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [tooltipNode, setTooltipNode] = useState<Node | null>(null);
     const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+
     const stageRef = useRef<Konva.Stage | null>(null);
+    const containerRef = useRef<HTMLDivElement | null>(null);
     const nodePositions = useRef(new Map<string, { x: number, y: number }>());
     const isPanning = useRef(false);
     const lastMousePosition = useRef({ x: 0, y: 0 });
-    const [clusters, setClusters] = useState<Cluster[]>([]);
+
     const colorMode = useColorModeValue('light', 'dark');
     const clusterColors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8'];
 
@@ -95,31 +98,26 @@ const SimilarityMap: React.FC<SimilarityMapProps> = ({ songs, similarities, sett
 
         return { nodes: newNodes, edges: newEdges };
     }, [songs, similarities, settings]);
-    const kMeansClustering = (nodes: Node[], k: number, maxIterations: number = 100): Cluster[] => {
-        // Инициализация случайных центроидов
-        let centroids = nodes.slice(0, k).map((node, index) => ({
+
+    const kMeansClustering = useCallback((nodes: Node[], k: number, maxIterations: number = 100): Cluster[] => {
+        let centroids: Cluster[] = nodes.slice(0, k).map((node, index) => ({
             id: index,
             centroid: { x: node.x, y: node.y },
             nodes: []
         }));
 
         for (let i = 0; i < maxIterations; i++) {
-            // Очистка кластеров
             centroids.forEach(cluster => cluster.nodes = []);
 
-            // Назначение узлов ближайшим центроидам
             nodes.forEach(node => {
-                const closestCentroid = centroids.reduce((closest: { cluster: Cluster; distance: number }, cluster) => {
-                    const distance = Math.sqrt(
-                        Math.pow(cluster.centroid.x - node.x, 2) + Math.pow(cluster.centroid.y - node.y, 2)
-                    );
+                const closestCentroid = centroids.reduce((closest, cluster) => {
+                    const distance = Math.hypot(cluster.centroid.x - node.x, cluster.centroid.y - node.y);
                     return distance < closest.distance ? { cluster, distance } : closest;
                 }, { cluster: centroids[0], distance: Infinity });
 
                 closestCentroid.cluster.nodes.push(node);
             });
 
-            // Пересчет центроидов
             const newCentroids = centroids.map(cluster => ({
                 ...cluster,
                 centroid: {
@@ -128,7 +126,6 @@ const SimilarityMap: React.FC<SimilarityMapProps> = ({ songs, similarities, sett
                 }
             }));
 
-            // Проверка на сходимость
             if (JSON.stringify(newCentroids) === JSON.stringify(centroids)) {
                 break;
             }
@@ -137,61 +134,59 @@ const SimilarityMap: React.FC<SimilarityMapProps> = ({ songs, similarities, sett
         }
 
         return centroids;
-    };
+    }, []);
 
     useEffect(() => {
         const { nodes: newNodes, edges: newEdges } = createNodesAndEdges();
         setNodes(newNodes);
         setEdges(newEdges);
-        const newClusters = kMeansClustering(newNodes, 5); // Используем 5 кластеров
+        const newClusters = kMeansClustering(newNodes, 5);
         setClusters(newClusters);
-    }, [createNodesAndEdges]);
+    }, [createNodesAndEdges, kMeansClustering]);
+
+    const handleWheel = useCallback((e: WheelEvent) => {
+        e.preventDefault();
+        if (stageRef.current) {
+            const stage = stageRef.current;
+            const oldScale = stage.scaleX();
+            const pointerPosition = stage.getPointerPosition();
+            if (!pointerPosition) return;
+
+            const mousePointTo = {
+                x: (pointerPosition.x - stage.x()) / oldScale,
+                y: (pointerPosition.y - stage.y()) / oldScale,
+            };
+
+            const newScale = e.deltaY < 0 ? oldScale * 1.1 : oldScale / 1.1;
+
+            setScale(newScale);
+            setPosition({
+                x: pointerPosition.x - mousePointTo.x * newScale,
+                y: pointerPosition.y - mousePointTo.y * newScale,
+            });
+        }
+    }, []);
 
     useEffect(() => {
-        const handleWheel = (e: WheelEvent) => {
-            e.preventDefault();
-            if (stageRef.current) {
-                const stage = stageRef.current;
-                const oldScale = stage.scaleX();
-
-                const pointerPosition = stage.getPointerPosition();
-                if (!pointerPosition) return;
-
-                const mousePointTo = {
-                    x: (pointerPosition.x - stage.x()) / oldScale,
-                    y: (pointerPosition.y - stage.y()) / oldScale,
-                };
-
-                const newScale = e.deltaY < 0 ? oldScale * 1.1 : oldScale / 1.1;
-
-                setScale(newScale);
-                setPosition({
-                    x: pointerPosition.x - mousePointTo.x * newScale,
-                    y: pointerPosition.y - mousePointTo.y * newScale,
-                });
-            }
-        };
-
-        const element = stageRef.current?.container();
+        const element = containerRef.current;
         if (element) {
             element.addEventListener('wheel', handleWheel, { passive: false });
         }
-
         return () => {
             if (element) {
                 element.removeEventListener('wheel', handleWheel);
             }
         };
-    }, []);
+    }, [handleWheel]);
 
-    const handleMouseDownOutside = (e: React.MouseEvent<HTMLDivElement>) => {
+    const handleMouseDown = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
         if (e.button === 1) {
             isPanning.current = true;
             lastMousePosition.current = { x: e.clientX, y: e.clientY };
         }
-    };
+    }, []);
 
-    const handleMouseMoveOutside = (e: React.MouseEvent<HTMLDivElement>) => {
+    const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
         if (isPanning.current) {
             const dx = e.clientX - lastMousePosition.current.x;
             const dy = e.clientY - lastMousePosition.current.y;
@@ -202,38 +197,37 @@ const SimilarityMap: React.FC<SimilarityMapProps> = ({ songs, similarities, sett
             lastMousePosition.current = { x: e.clientX, y: e.clientY };
         }
 
-        // Обработка положения для tooltip
-        if (stageRef.current) {
-            const stage = stageRef.current;
-            const stageRect = stage.container().getBoundingClientRect();
+        if (stageRef.current && containerRef.current) {
+            const container = containerRef.current;
+            const containerRect = container.getBoundingClientRect();
             const mousePos = {
-                x: e.clientX - stageRect.left,
-                y: e.clientY - stageRect.top
+                x: (e.clientX - containerRect.left - position.x) / scale,
+                y: (e.clientY - containerRect.top - position.y) / scale
             };
 
             const hoveredNode = nodes.find(node => {
-                const dx = node.x * scale + position.x - mousePos.x;
-                const dy = node.y * scale + position.y - mousePos.y;
-                return Math.sqrt(dx * dx + dy * dy) <= node.radius * scale;
+                const dx = node.x - mousePos.x;
+                const dy = node.y - mousePos.y;
+                return Math.hypot(dx, dy) <= node.radius;
             });
 
             setTooltipNode(hoveredNode || null);
-            setTooltipPosition({ x: e.clientX, y: e.clientY });
+            setTooltipPosition({
+                x: e.clientX - containerRect.left,
+                y: e.clientY - containerRect.top
+            });
         }
-    };
-
-    const handleMouseUpOutside = (e: React.MouseEvent<HTMLDivElement>) => {
+    }, [nodes, scale, position]);
+    const handleMouseUp = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
         if (e.button === 1) {
             isPanning.current = false;
         }
-    };
+    }, []);
 
-    const handleNodeClick = (e: Konva.KonvaEventObject<MouseEvent>, node: Node) => {
-        console.log("Node clicked:", node);
+    const handleNodeClick = useCallback((e: Konva.KonvaEventObject<MouseEvent>, node: Node) => {
         e.cancelBubble = true;
         onSongSelect(node.song);
-    };
-
+    }, [onSongSelect]);
 
     const minClickRadius = 10;
 
@@ -248,9 +242,9 @@ const SimilarityMap: React.FC<SimilarityMapProps> = ({ songs, similarities, sett
             y={position.y}
         >
             <Layer listening={false}>
-                {edges.map((edge) => (
+                {edges.map((edge, index) => (
                     <Line
-                        key={`edge-${edge.source.song.ISRC}-${edge.target.song.ISRC}`}
+                        key={`edge-${index}-${edge.source.song.ISRC}-${edge.target.song.ISRC}`}
                         points={[edge.source.x, edge.source.y, edge.target.x, edge.target.y]}
                         stroke={colorMode === "dark" ? "#4299e1" : "#2b6cb0"}
                         strokeWidth={edge.weight / scale}
@@ -287,16 +281,17 @@ const SimilarityMap: React.FC<SimilarityMapProps> = ({ songs, similarities, sett
                 })}
             </Layer>
         </Stage>
-    ), [edges, clusters, onSongSelect, scale, position, colorMode, minClickRadius, clusterColors]);
+    ), [edges, clusters, handleNodeClick, scale, position, colorMode, minClickRadius, clusterColors]);
 
     return (
         <Box
+            ref={containerRef}
             position="relative"
             width="800px"
             height="600px"
-            onMouseDown={handleMouseDownOutside}
-            onMouseMove={handleMouseMoveOutside}
-            onMouseUp={handleMouseUpOutside}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
             onMouseLeave={() => { isPanning.current = false; }}
         >
             {memoizedStage}
@@ -318,6 +313,7 @@ const SimilarityMap: React.FC<SimilarityMapProps> = ({ songs, similarities, sett
                     top={`${tooltipPosition.y}px`}
                     width="1px"
                     height="1px"
+                    pointerEvents="none"
                 />
             </Tooltip>
         </Box>

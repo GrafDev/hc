@@ -4,11 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="39ec2c1b-fe7b-42d2-b232-b35ae80379be" name="Changes" comment="Make pan zoom and click">
-      <change afterPath="$PROJECT_DIR$/frontend/src/features/compute-convex-hull.ts" afterDir="false" />
+    <list default="true" id="39ec2c1b-fe7b-42d2-b232-b35ae80379be" name="Changes" comment="Parse JSon on Server">
+      <change afterPath="$PROJECT_DIR$/api/functions/src/controllers/json-controller.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/functions/src/features/csv-parser.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/functions/src/services/json-service.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/functions/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/functions/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/functions/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/api/functions/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/functions/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/api/functions/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/functions/src/routes/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/functions/src/routes/routes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/dist/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/dist/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/providers/DataProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/providers/DataProvider.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/entities/song/model/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/entities/song/model/types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/features/calculateSimilarity/lib/calculateSimilarity.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/features/calculateSimilarity/lib/calculateSimilarity.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/features/onceLog.ts" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/pages/MainPage/MainPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/MainPage/MainPage.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/widgets/SimilarityMap/ui/SimilarityMap.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/widgets/SimilarityMap/ui/SimilarityMap.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/widgets/SongInfo/ui/SongInfo.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/widgets/SongInfo/ui/SongInfo.tsx" afterDir="false" />
@@ -22,8 +33,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="package.json" />
-        <option value="JavaScript File" />
         <option value="TypeScript File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -60,7 +71,7 @@
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;20.12.2&quot;,
     &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;20.12.14&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/gregy/WebstormProjects/hc/frontend/package.json&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/gregy/WebstormProjects/hc/api/functions&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -88,7 +99,7 @@
     </key>
   </component>
   <component name="RunManager" selected="npm.dev">
-    <configuration name="index.js" type="NodeJSConfigurationType" nameIsGenerated="true" path-to-js-file="index.js" working-dir="$PROJECT_DIR$/api">
+    <configuration name="index.js" type="NodeJSConfigurationType" nameIsGenerated="true" path-to-js-file="index.js" working-dir="$PROJECT_DIR$/api/functions">
       <method v="2" />
     </configuration>
     <configuration name="build" type="js.build_tools.npm" nameIsGenerated="true">
@@ -143,7 +154,10 @@
       <workItem from="1722895459689" duration="992000" />
       <workItem from="1722896463681" duration="4153000" />
       <workItem from="1722924081392" duration="7607000" />
-      <workItem from="1722943757107" duration="7519000" />
+      <workItem from="1722943757107" duration="11401000" />
+      <workItem from="1722957853714" duration="903000" />
+      <workItem from="1722964712399" duration="9260000" />
+      <workItem from="1722978215744" duration="657000" />
     </task>
     <task id="LOCAL-00001" summary="q">
       <option name="closed" value="true" />
@@ -241,7 +255,15 @@
       <option name="project" value="LOCAL" />
       <updated>1722945552148</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Make pan zoom and click">
+      <option name="closed" value="true" />
+      <created>1722952794555</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1722952794555</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -275,6 +297,7 @@
     <MESSAGE value="Server is ready" />
     <MESSAGE value="Front is ok." />
     <MESSAGE value="Make pan zoom and click" />
-    <option name="LAST_COMMIT_MESSAGE" value="Make pan zoom and click" />
+    <MESSAGE value="Parse JSon on Server" />
+    <option name="LAST_COMMIT_MESSAGE" value="Parse JSon on Server" />
   </component>
 </project>

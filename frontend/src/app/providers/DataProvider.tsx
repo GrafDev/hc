@@ -1,9 +1,8 @@
 import {createContext, useState, useContext, ReactNode, useEffect} from 'react';
 import * as React from 'react';
 import {SpotifySong, SongSimilarity, SimilarityMetric} from '../../entities/song/model/types';
-import {parseSpotifyCSV} from '../../shared/lib/csvParser';
-import {calculateSimilarity} from '../../features/calculateSimilarity/lib/calculateSimilarity';
 import axios from "axios";
+import {calculateSimilarity} from "../../features/calculateSimilarity/lib/calculateSimilarity.ts";
 
 interface DataContextType {
     songs: SpotifySong[];
@@ -34,30 +33,25 @@ export const DataProvider: React.FC<DataProviderProps> = ({children}) => {
 
     useEffect(() => {
         const metric: SimilarityMetric = 'jaccard';
-
         const fetchData = async () => {
             try {
                 setLoading(true);
-
-                const apiUrl = 'https://us-central1-hunter-corp-sa.cloudfunctions.net/api/file';
-
-                // Получение содержимого файла
+                console.log("Loading data from JSON");
+                const apiUrl = 'https://us-central1-hunter-corp-sa.cloudfunctions.net/api/json';
+                // Получение готового JSON
                 const response = await axios.get(apiUrl);
-                const csvText = response.data;
+                const data = response.data;
 
-                console.log("Start get csvText");
+                console.log("Received JSON data");
 
-                // Парсинг CSV
-                const parsedSongs = await parseSpotifyCSV(csvText);
-                setSongs(parsedSongs);
-                console.log("parsedSongs", parsedSongs);
+                // Предполагаем, что JSON содержит поля songs и similarities
+                setSongs(data);
 
-                // Расчет сходства
-                const calculatedSimilarities = calculateSimilarity(parsedSongs, metric);
+                const calculatedSimilarities = calculateSimilarity(data, metric, 5);
                 setSimilarities(calculatedSimilarities);
-                console.log("similarities", calculatedSimilarities);
+
             } catch (err) {
-                setError('Error loading or processing data');
+                setError('Error loading data');
                 console.error(err);
             } finally {
                 setLoading(false);

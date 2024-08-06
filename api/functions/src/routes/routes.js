@@ -1,5 +1,7 @@
 import FileControllers from '../controllers/file-controllers.js'
 import MessageControllers from '../controllers/message-controller.js'
+import JsonControllers from '../controllers/json-controller.js'
+
 import express from 'express'
 const routerAPI = express.Router();
 
@@ -13,6 +15,12 @@ routerAPI.get('/short-file', (req, res) => {
   console.log("RouterAPI ShortFile");
   const route = FileControllers.readShortFile(req, res);
 
+  return route;
+});
+
+routerAPI.get('/json', (req, res) => {
+  console.log("RouterAPI Json");
+  const route = JsonControllers.readJson(req, res);
   return route;
 });
 
