@@ -24,12 +24,12 @@ const MainPage: React.FC = () => {
     const {colorMode, toggleColorMode} = useColorMode();
     const isMobile = useBreakpointValue({ base: true, xl: false });
     const [visualizationSettings, setVisualizationSettings] = useState<VisualizationSettings>({
-        similarityThreshold: 0.7,
-        maxConnections: 50,
-        nodeSizeScale: 1,
-        edgeWeightScale: 1,
+        similarityThreshold: 0.16,
+        maxConnections: 15,
+        nodeSizeScale: 0.4,
+        edgeWeightScale: 0.4,
     });
-    const [songCount, setSongCount] = useState(6); // Начальное значение количества песен
+    const [songCount, setSongCount] = useState(512); // Начальное значение количества песен
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const handleSongSelect = (song: SpotifySong) => {
