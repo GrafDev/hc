@@ -23,9 +23,10 @@ export const useData = () => {
 
 interface DataProviderProps {
     children: ReactNode;
+    quantity?: number;
 }
 
-export const DataProvider: React.FC<DataProviderProps> = ({children}) => {
+export const DataProvider: React.FC<DataProviderProps> = ({children,quantity}) => {
     const [songs, setSongs] = useState<SpotifySong[]>([]);
     const [similarities, setSimilarities] = useState<SongSimilarity>({});
     const [loading, setLoading] = useState(true);
@@ -37,7 +38,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({children}) => {
             try {
                 setLoading(true);
                 console.log("Loading data from JSON");
-                const apiUrl = 'https://us-central1-hunter-corp-sa.cloudfunctions.net/api/json';
+                const apiUrl = `https://us-central1-hunter-corp-sa.cloudfunctions.net/api/json:${quantity}`;
                 // Получение готового JSON
                 const response = await axios.get(apiUrl);
                 const data = response.data;

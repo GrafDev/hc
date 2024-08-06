@@ -40,7 +40,7 @@ const SimilarityMap: React.FC<SimilarityMapProps> = ({ songs, similarities, sett
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [tooltipNode, setTooltipNode] = useState<Node | null>(null);
     const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
-
+const [tooltipVisible, setTooltipVisible] = useState(false);
     const stageRef = useRef<Konva.Stage | null>(null);
     const containerRef = useRef<HTMLDivElement | null>(null);
     const nodePositions = useRef(new Map<string, { x: number, y: number }>());
@@ -212,6 +212,7 @@ const SimilarityMap: React.FC<SimilarityMapProps> = ({ songs, similarities, sett
             });
 
             setTooltipNode(hoveredNode || null);
+            setTooltipVisible(true)
             setTooltipPosition({
                 x: e.clientX - containerRect.left,
                 y: e.clientY - containerRect.top
@@ -227,6 +228,7 @@ const SimilarityMap: React.FC<SimilarityMapProps> = ({ songs, similarities, sett
     const handleNodeClick = useCallback((e: Konva.KonvaEventObject<MouseEvent>, node: Node) => {
         e.cancelBubble = true;
         onSongSelect(node.song);
+        setTooltipVisible(false)
     }, [onSongSelect]);
 
     const minClickRadius = 10;
@@ -296,7 +298,7 @@ const SimilarityMap: React.FC<SimilarityMapProps> = ({ songs, similarities, sett
         >
             {memoizedStage}
             <Tooltip
-                isOpen={!!tooltipNode}
+                isOpen={!!tooltipNode && tooltipVisible}
                 label={
                     tooltipNode && (
                         <Text fontSize="md">

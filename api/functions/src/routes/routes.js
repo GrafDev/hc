@@ -18,12 +18,14 @@ routerAPI.get('/short-file', (req, res) => {
   return route;
 });
 
-routerAPI.get('/json', (req, res) => {
+routerAPI.get('/json:quantity', (req, res) => {
   console.log("RouterAPI Json");
-  const route = JsonControllers.readJson(req, res);
-  return route;
+  const quantity = req.params.quantity;
+  if (quantity) {
+    req.params.quantity = quantity.substring(1); // Удаляем двоеточие из начала
+  }
+  return JsonControllers.readJson(req, res);
 });
-
 routerAPI.get('/isok', (req, res) => {
   const route = MessageControllers.getServiceOk(req, res);
   return route;
