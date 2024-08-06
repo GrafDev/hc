@@ -46,6 +46,7 @@ const MainPage: React.FC = () => {
     };
 
     const handleSongCountChange = (value: number) => {
+        console.log("handleSongCountChange", value);
         setSongCount(value);
     };
 

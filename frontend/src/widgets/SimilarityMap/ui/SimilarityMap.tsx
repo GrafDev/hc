@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState, useMemo, useRef } from "react";
-import { Stage, Layer, Line,Circle,  FastLayer } from 'react-konva';
+import { Stage, Layer, Line, Circle } from 'react-konva';
 import { useColorModeValue } from '@chakra-ui/react';
-import { Box, Text, Tooltip} from "@chakra-ui/react";
+import { Box, Text, Tooltip } from "@chakra-ui/react";
 import { SpotifySong, SongSimilarity, VisualizationSettings } from '../../../entities/song/model/types';
 import Konva from "konva";
 
@@ -93,80 +93,45 @@ const SimilarityMap: React.FC<SimilarityMapProps> = ({ songs, similarities, sett
         setEdges(newEdges);
     }, [createNodesAndEdges]);
 
-    const handleWheel = (e: Konva.KonvaEventObject<WheelEvent>) => {
-        e.evt.preventDefault();
-        const scaleBy = 1.1;
-        const stage = stageRef.current;
-        if (!stage) return;
+    useEffect(() => {
+        const handleWheel = (e: WheelEvent) => {
+            e.preventDefault();
+            if (stageRef.current) {
+                const stage = stageRef.current;
+                const oldScale = stage.scaleX();
 
-        const oldScale = stage.scaleX();
-        const pointerPosition = stage.getPointerPosition();
-        if (!pointerPosition) return;
+                const pointerPosition = stage.getPointerPosition();
+                if (!pointerPosition) return;
 
-        const mousePointTo = {
-            x: (pointerPosition.x - stage.x()) / oldScale,
-            y: (pointerPosition.y - stage.y()) / oldScale,
+                const mousePointTo = {
+                    x: (pointerPosition.x - stage.x()) / oldScale,
+                    y: (pointerPosition.y - stage.y()) / oldScale,
+                };
+
+                const newScale = e.deltaY < 0 ? oldScale * 1.1 : oldScale / 1.1;
+
+                setScale(newScale);
+                setPosition({
+                    x: pointerPosition.x - mousePointTo.x * newScale,
+                    y: pointerPosition.y - mousePointTo.y * newScale,
+                });
+            }
         };
 
-        const newScale = e.evt.deltaY < 0 ? oldScale * scaleBy : oldScale / scaleBy;
-
-        setScale(newScale);
-        setPosition({
-            x: pointerPosition.x - mousePointTo.x * newScale,
-            y: pointerPosition.y - mousePointTo.y * newScale,
-        });
-    };
-
-    const handleMouseMove = (e: Konva.KonvaEventObject<MouseEvent>) => {
-        const stage = e.target.getStage();
-        if (!stage) return;
-
-        const mousePos = stage.getPointerPosition();
-        if (!mousePos) return;
-
-        const hoveredNode = nodes.find(node => {
-            const dx = node.x * scale + position.x - mousePos.x;
-            const dy = node.y * scale + position.y - mousePos.y;
-            return Math.sqrt(dx * dx + dy * dy) <= node.radius * scale;
-        });
-        setTooltipNode(hoveredNode || null);
-        setTooltipPosition({ x: mousePos.x, y: mousePos.y });
-    };
-
-
-    const handleWheelOutside = (e: React.WheelEvent<HTMLDivElement>) => {
-        if (stageRef.current) {
-            const boundingRect = stageRef.current.container().getBoundingClientRect();
-            const scaleX = stageRef.current.scaleX();
-            const scaleY = stageRef.current.scaleY();
-
-            const stage = stageRef.current;
-            const pointerPosition = {
-                x: (e.clientX - boundingRect.left) / scaleX,
-                y: (e.clientY - boundingRect.top) / scaleY
-            };
-
-            const oldScale = stage.scaleX();
-
-            const mousePointTo = {
-                x: (pointerPosition.x - stage.x()) / oldScale,
-                y: (pointerPosition.y - stage.y()) / oldScale,
-            };
-
-            const newScale = e.deltaY < 0 ? oldScale * 1.1 : oldScale / 1.1;
-
-            setScale(newScale);
-            setPosition({
-                x: pointerPosition.x - mousePointTo.x * newScale,
-                y: pointerPosition.y - mousePointTo.y * newScale,
-            });
-
-            e.preventDefault();
+        const element = stageRef.current?.container();
+        if (element) {
+            element.addEventListener('wheel', handleWheel, { passive: false });
         }
-    };
+
+        return () => {
+            if (element) {
+                element.removeEventListener('wheel', handleWheel);
+            }
+        };
+    }, []);
 
     const handleMouseDownOutside = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (e.button === 1) { // Среднее колесико мыши
+        if (e.button === 1) {
             isPanning.current = true;
             lastMousePosition.current = { x: e.clientX, y: e.clientY };
         }
@@ -182,6 +147,25 @@ const SimilarityMap: React.FC<SimilarityMapProps> = ({ songs, similarities, sett
             }));
             lastMousePosition.current = { x: e.clientX, y: e.clientY };
         }
+
+        // Обработка положения для tooltip
+        if (stageRef.current) {
+            const stage = stageRef.current;
+            const stageRect = stage.container().getBoundingClientRect();
+            const mousePos = {
+                x: e.clientX - stageRect.left,
+                y: e.clientY - stageRect.top
+            };
+
+            const hoveredNode = nodes.find(node => {
+                const dx = node.x * scale + position.x - mousePos.x;
+                const dy = node.y * scale + position.y - mousePos.y;
+                return Math.sqrt(dx * dx + dy * dy) <= node.radius * scale;
+            });
+
+            setTooltipNode(hoveredNode || null);
+            setTooltipPosition({ x: e.clientX, y: e.clientY });
+        }
     };
 
     const handleMouseUpOutside = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -190,76 +174,82 @@ const SimilarityMap: React.FC<SimilarityMapProps> = ({ songs, similarities, sett
         }
     };
 
+    const handleNodeClick = (e: Konva.KonvaEventObject<MouseEvent>, node: Node) => {
+        console.log("Node clicked:", node);
+        e.cancelBubble = true;
+        onSongSelect(node.song);
+    };
+
+    const minClickRadius = 10;
+
     const memoizedStage = useMemo(() => (
         <Stage
             width={800}
             height={600}
-            onWheel={handleWheel}
-            onMouseMove={handleMouseMove}
             ref={stageRef}
             scaleX={scale}
             scaleY={scale}
             x={position.x}
             y={position.y}
         >
-            <FastLayer>
+            <Layer listening={false}>
                 {edges.map((edge, index) => (
                     <Line
                         key={`edge-${index}`}
                         points={[edge.source.x, edge.source.y, edge.target.x, edge.target.y]}
-                        stroke={colorMode==="dark" ? "#4299e1" : "#2b6cb0"}
+                        stroke={colorMode === "dark" ? "#4299e1" : "#2b6cb0"}
                         strokeWidth={edge.weight / scale}
                     />
                 ))}
-            </FastLayer>
+            </Layer>
             <Layer>
                 {nodes.map((node) => (
                     <Circle
                         key={`node-${node.song.Track}`}
                         x={node.x}
                         y={node.y}
-                        radius={node.radius}
-                        fill={colorMode==="dark" ? "#48BB78" : "#2F855A"}
-                        onClick={() => onSongSelect(node.song)}
+                        radius={Math.max(node.radius, minClickRadius / scale)}
+                        fill={colorMode === "dark" ? "#48BB78" : "#2F855A"}
+                        onClick={(e) => handleNodeClick(e, node)}
+                        hitStrokeWidth={10 / scale}
                     />
                 ))}
             </Layer>
         </Stage>
-    ), [edges, nodes, onSongSelect, scale, position]);
+    ), [edges, nodes, onSongSelect, scale, position, colorMode]);
 
     return (
-            <Box
-                position="relative"
-                width="800px"
-                height="600px"
-                onWheel={handleWheelOutside}
-                onMouseDown={handleMouseDownOutside}
-                onMouseMove={handleMouseMoveOutside}
-                onMouseUp={handleMouseUpOutside}
-                onMouseLeave={() => { isPanning.current = false; }}
+        <Box
+            position="relative"
+            width="800px"
+            height="600px"
+            onMouseDown={handleMouseDownOutside}
+            onMouseMove={handleMouseMoveOutside}
+            onMouseUp={handleMouseUpOutside}
+            onMouseLeave={() => { isPanning.current = false; }}
+        >
+            {memoizedStage}
+            <Tooltip
+                isOpen={!!tooltipNode}
+                label={
+                    tooltipNode && (
+                        <Text fontSize="md">
+                            {`${tooltipNode.song.Track} - ${tooltipNode.song.Artist}`}
+                        </Text>
+                    )
+                }
+                placement="top"
+                hasArrow
             >
-                {memoizedStage}
-                <Tooltip
-                    isOpen={!!tooltipNode}
-                    label={
-                        tooltipNode && (
-                            <Text fontSize="md">
-                                {`${tooltipNode.song.Track} - ${tooltipNode.song.Artist}`}
-                            </Text>
-                        )
-                    }
-                    placement="top"
-                    hasArrow
-                >
-                    <Box
-                        position="absolute"
-                        left={`${tooltipPosition.x}px`}
-                        top={`${tooltipPosition.y}px`}
-                        width="1px"
-                        height="1px"
-                    />
-                </Tooltip>
-            </Box>
+                <Box
+                    position="absolute"
+                    left={`${tooltipPosition.x}px`}
+                    top={`${tooltipPosition.y}px`}
+                    width="1px"
+                    height="1px"
+                />
+            </Tooltip>
+        </Box>
     );
 };
 
