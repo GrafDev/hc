@@ -6,6 +6,7 @@ import {calculateSimilarity} from "../../features/calculateSimilarity/lib/calcul
 
 interface DataContextType {
     songs: SpotifySong[];
+    _quantity: number;
     similarities: SongSimilarity;
     loading: boolean;
     error: string | null;
@@ -23,11 +24,12 @@ export const useData = () => {
 
 interface DataProviderProps {
     children: ReactNode;
-    quantity?: number;
+    quantity: number;
 }
 
 export const DataProvider: React.FC<DataProviderProps> = ({children,quantity}) => {
     const [songs, setSongs] = useState<SpotifySong[]>([]);
+    const [_quantity] = useState(quantity);
     const [similarities, setSimilarities] = useState<SongSimilarity>({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -63,7 +65,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({children,quantity}) =
     }, []);
 
     return (
-        <DataContext.Provider value={{songs, similarities, loading, error}}>
+        <DataContext.Provider value={{songs,_quantity, similarities, loading, error}}>
             {children}
         </DataContext.Provider>
     );

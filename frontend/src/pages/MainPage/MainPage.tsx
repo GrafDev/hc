@@ -19,7 +19,7 @@ import SongInfo from "../../widgets/SongInfo/ui/SongInfo";
 import MemoizedSimilarityMap from "../../widgets/SimilarityMap/ui/SimilarityMap";
 
 const MainPage: React.FC = () => {
-    const { songs, similarities, loading, error } = useData();
+    const { songs,_quantity, similarities, loading, error } = useData();
     const [selectedSong, setSelectedSong] = useState<SpotifySong | null>(null);
     const {colorMode, toggleColorMode} = useColorMode();
     const isMobile = useBreakpointValue({ base: true, xl: false });
@@ -29,7 +29,7 @@ const MainPage: React.FC = () => {
         nodeSizeScale: 0.4,
         edgeWeightScale: 0.4,
     });
-    const [songCount, setSongCount] = useState(512);
+    const [songCount, setSongCount] = useState(Math.round(_quantity / 2));
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const handleSongSelect = (song: SpotifySong) => {
@@ -115,12 +115,12 @@ const MainPage: React.FC = () => {
                             />
                         </Flex>
                     </Card>
-                    <Modal isOpen={!!(isOpen && isMobile)} onClose={handleClose} useInert={isMobile}>
+                    <Modal isOpen={!!(isOpen && isMobile)} onClose={handleClose} useInert={isMobile} >
                         <ModalOverlay />
-                        <ModalContent>
+                        <ModalContent width="80%" maxWidth="800px">
                             <ModalHeader>Song Information</ModalHeader>
                             <ModalCloseButton />
-                            <ModalBody>
+                            <ModalBody >
                                 {selectedSong ? (
                                     <SongInfo
                                         song={selectedSong}

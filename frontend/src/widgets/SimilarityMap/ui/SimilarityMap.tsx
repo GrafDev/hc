@@ -40,12 +40,12 @@ const SimilarityMap: React.FC<SimilarityMapProps> = ({ songs, similarities, sett
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [tooltipNode, setTooltipNode] = useState<Node | null>(null);
     const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
-const [tooltipVisible, setTooltipVisible] = useState(false);
+    const [tooltipVisible, setTooltipVisible] = useState(false);
     const stageRef = useRef<Konva.Stage | null>(null);
     const containerRef = useRef<HTMLDivElement | null>(null);
     const nodePositions = useRef(new Map<string, { x: number, y: number }>());
     const isPanning = useRef(false);
-    const lastMousePosition = useRef({ x: 0, y: 0 });
+    const lastPointerPosition = useRef({ x: 0, y: 0 });
 
     const colorMode = useColorModeValue('light', 'dark');
     const clusterColors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8'];
@@ -179,56 +179,54 @@ const [tooltipVisible, setTooltipVisible] = useState(false);
         };
     }, [handleWheel]);
 
-    const handleMouseDown = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-        if (e.button === 1) {
+    const handlePointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+        if (e.button === 0 || e.button === 1) {
             isPanning.current = true;
-            lastMousePosition.current = { x: e.clientX, y: e.clientY };
+            lastPointerPosition.current = { x: e.clientX, y: e.clientY };
         }
     }, []);
 
-    const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const handlePointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
         if (isPanning.current) {
-            const dx = e.clientX - lastMousePosition.current.x;
-            const dy = e.clientY - lastMousePosition.current.y;
+            const dx = e.clientX - lastPointerPosition.current.x;
+            const dy = e.clientY - lastPointerPosition.current.y;
             setPosition(prev => ({
                 x: prev.x + dx,
                 y: prev.y + dy
             }));
-            lastMousePosition.current = { x: e.clientX, y: e.clientY };
+            lastPointerPosition.current = { x: e.clientX, y: e.clientY };
         }
 
         if (stageRef.current && containerRef.current) {
             const container = containerRef.current;
             const containerRect = container.getBoundingClientRect();
-            const mousePos = {
+            const pointerPos = {
                 x: (e.clientX - containerRect.left - position.x) / scale,
                 y: (e.clientY - containerRect.top - position.y) / scale
             };
 
             const hoveredNode = nodes.find(node => {
-                const dx = node.x - mousePos.x;
-                const dy = node.y - mousePos.y;
+                const dx = node.x - pointerPos.x;
+                const dy = node.y - pointerPos.y;
                 return Math.hypot(dx, dy) <= node.radius;
             });
 
             setTooltipNode(hoveredNode || null);
-            setTooltipVisible(true)
+            setTooltipVisible(!!hoveredNode);
             setTooltipPosition({
                 x: e.clientX - containerRect.left,
                 y: e.clientY - containerRect.top
             });
         }
     }, [nodes, scale, position]);
-    const handleMouseUp = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-        if (e.button === 1) {
-            isPanning.current = false;
-        }
+
+    const handlePointerUp = useCallback(() => {
+        isPanning.current = false;
     }, []);
 
-    const handleNodeClick = useCallback((e: Konva.KonvaEventObject<MouseEvent>, node: Node) => {
-        e.cancelBubble = true;
+    const handleNodeInteraction = useCallback((node: Node) => {
         onSongSelect(node.song);
-        setTooltipVisible(false)
+        setTooltipVisible(false);
     }, [onSongSelect]);
 
     const minClickRadius = 10;
@@ -274,7 +272,8 @@ const [tooltipVisible, setTooltipVisible] = useState(false);
                                     fill={clusterColors[clusterIndex % clusterColors.length]}
                                     stroke={colorMode === "dark" ? "#48BB78" : "#2F855A"}
                                     strokeWidth={2 / scale}
-                                    onClick={(e) => handleNodeClick(e, node)}
+                                    onClick={() => handleNodeInteraction(node)}
+                                    onTap={() => handleNodeInteraction(node)}
                                     hitStrokeWidth={10 / scale}
                                 />
                             ))}
@@ -283,7 +282,7 @@ const [tooltipVisible, setTooltipVisible] = useState(false);
                 })}
             </Layer>
         </Stage>
-    ), [edges, clusters, handleNodeClick, scale, position, colorMode, minClickRadius, clusterColors]);
+    ), [edges, clusters, handleNodeInteraction, scale, position, colorMode, minClickRadius, clusterColors]);
 
     return (
         <Box
@@ -291,10 +290,11 @@ const [tooltipVisible, setTooltipVisible] = useState(false);
             position="relative"
             width="800px"
             height="600px"
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={() => { isPanning.current = false; }}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerLeave={handlePointerUp}
+            style={{ touchAction: 'none' }}
         >
             {memoizedStage}
             <Tooltip
