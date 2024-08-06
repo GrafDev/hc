@@ -5,12 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="39ec2c1b-fe7b-42d2-b232-b35ae80379be" name="Changes" comment="Make pan zoom and click">
+      <change afterPath="$PROJECT_DIR$/frontend/src/features/compute-convex-hull.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/.firebase/hosting.ZGlzdA.cache" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.firebase/hosting.ZGlzdA.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/dist/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/dist/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/providers/DataProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/providers/DataProvider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/entities/song/model/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/entities/song/model/types.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/pages/MainPage/MainPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/MainPage/MainPage.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/widgets/SimilarityMap/ui/SimilarityMap.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/widgets/SimilarityMap/ui/SimilarityMap.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/widgets/SongInfo/ui/SongInfo.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/widgets/SongInfo/ui/SongInfo.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,9 +21,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="TypeScript File" />
         <option value="package.json" />
         <option value="JavaScript File" />
+        <option value="TypeScript File" />
       </list>
     </option>
   </component>
@@ -142,7 +143,7 @@
       <workItem from="1722895459689" duration="992000" />
       <workItem from="1722896463681" duration="4153000" />
       <workItem from="1722924081392" duration="7607000" />
-      <workItem from="1722943757107" duration="1730000" />
+      <workItem from="1722943757107" duration="7519000" />
     </task>
     <task id="LOCAL-00001" summary="q">
       <option name="closed" value="true" />
@@ -232,7 +233,15 @@
       <option name="project" value="LOCAL" />
       <updated>1722930301088</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Make pan zoom and click">
+      <option name="closed" value="true" />
+      <created>1722945552148</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1722945552148</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

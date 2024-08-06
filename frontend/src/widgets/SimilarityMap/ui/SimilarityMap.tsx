@@ -1,15 +1,22 @@
 import React, { useCallback, useEffect, useState, useMemo, useRef } from "react";
-import { Stage, Layer, Line, Circle } from 'react-konva';
+import { Stage, Layer, Line, Circle, Group } from 'react-konva';
 import { useColorModeValue } from '@chakra-ui/react';
 import { Box, Text, Tooltip } from "@chakra-ui/react";
 import { SpotifySong, SongSimilarity, VisualizationSettings } from '../../../entities/song/model/types';
 import Konva from "konva";
+import computeConvexHull from "../../../features/compute-convex-hull.ts";
 
 interface SimilarityMapProps {
     songs: SpotifySong[];
     similarities: SongSimilarity;
     settings: VisualizationSettings;
     onSongSelect: (song: SpotifySong) => void;
+}
+
+interface Cluster {
+    id: number;
+    centroid: { x: number; y: number };
+    nodes: Node[];
 }
 
 interface Node {
@@ -36,7 +43,9 @@ const SimilarityMap: React.FC<SimilarityMapProps> = ({ songs, similarities, sett
     const nodePositions = useRef(new Map<string, { x: number, y: number }>());
     const isPanning = useRef(false);
     const lastMousePosition = useRef({ x: 0, y: 0 });
+    const [clusters, setClusters] = useState<Cluster[]>([]);
     const colorMode = useColorModeValue('light', 'dark');
+    const clusterColors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8'];
 
     const createNodesAndEdges = useCallback(() => {
         const width = 800;
@@ -86,11 +95,56 @@ const SimilarityMap: React.FC<SimilarityMapProps> = ({ songs, similarities, sett
 
         return { nodes: newNodes, edges: newEdges };
     }, [songs, similarities, settings]);
+    const kMeansClustering = (nodes: Node[], k: number, maxIterations: number = 100): Cluster[] => {
+        // Инициализация случайных центроидов
+        let centroids = nodes.slice(0, k).map((node, index) => ({
+            id: index,
+            centroid: { x: node.x, y: node.y },
+            nodes: []
+        }));
+
+        for (let i = 0; i < maxIterations; i++) {
+            // Очистка кластеров
+            centroids.forEach(cluster => cluster.nodes = []);
+
+            // Назначение узлов ближайшим центроидам
+            nodes.forEach(node => {
+                const closestCentroid = centroids.reduce((closest: { cluster: Cluster; distance: number }, cluster) => {
+                    const distance = Math.sqrt(
+                        Math.pow(cluster.centroid.x - node.x, 2) + Math.pow(cluster.centroid.y - node.y, 2)
+                    );
+                    return distance < closest.distance ? { cluster, distance } : closest;
+                }, { cluster: centroids[0], distance: Infinity });
+
+                closestCentroid.cluster.nodes.push(node);
+            });
+
+            // Пересчет центроидов
+            const newCentroids = centroids.map(cluster => ({
+                ...cluster,
+                centroid: {
+                    x: cluster.nodes.reduce((sum, node: Node) => sum + node.x, 0) / cluster.nodes.length,
+                    y: cluster.nodes.reduce((sum, node: Node) => sum + node.y, 0) / cluster.nodes.length
+                }
+            }));
+
+            // Проверка на сходимость
+            if (JSON.stringify(newCentroids) === JSON.stringify(centroids)) {
+                break;
+            }
+
+            centroids = newCentroids;
+        }
+
+        return centroids;
+    };
 
     useEffect(() => {
         const { nodes: newNodes, edges: newEdges } = createNodesAndEdges();
         setNodes(newNodes);
         setEdges(newEdges);
+        const newClusters = kMeansClustering(newNodes, 5); // Используем 5 кластеров
+        setClusters(newClusters);
     }, [createNodesAndEdges]);
 
     useEffect(() => {
@@ -180,6 +234,7 @@ const SimilarityMap: React.FC<SimilarityMapProps> = ({ songs, similarities, sett
         onSongSelect(node.song);
     };
 
+
     const minClickRadius = 10;
 
     const memoizedStage = useMemo(() => (
@@ -193,30 +248,46 @@ const SimilarityMap: React.FC<SimilarityMapProps> = ({ songs, similarities, sett
             y={position.y}
         >
             <Layer listening={false}>
-                {edges.map((edge, index) => (
+                {edges.map((edge) => (
                     <Line
-                        key={`edge-${index}`}
+                        key={`edge-${edge.source.song.ISRC}-${edge.target.song.ISRC}`}
                         points={[edge.source.x, edge.source.y, edge.target.x, edge.target.y]}
                         stroke={colorMode === "dark" ? "#4299e1" : "#2b6cb0"}
                         strokeWidth={edge.weight / scale}
+                        opacity={0.5}
                     />
                 ))}
             </Layer>
             <Layer>
-                {nodes.map((node) => (
-                    <Circle
-                        key={`node-${node.song.Track}`}
-                        x={node.x}
-                        y={node.y}
-                        radius={Math.max(node.radius, minClickRadius / scale)}
-                        fill={colorMode === "dark" ? "#48BB78" : "#2F855A"}
-                        onClick={(e) => handleNodeClick(e, node)}
-                        hitStrokeWidth={10 / scale}
-                    />
-                ))}
+                {clusters.map((cluster, clusterIndex) => {
+                    const hullPoints = computeConvexHull(cluster.nodes.map(node => ({x: node.x, y: node.y})));
+                    return (
+                        <Group key={`cluster-${cluster.id}`}>
+                            <Line
+                                points={hullPoints.flatMap(p => [p.x, p.y])}
+                                closed={true}
+                                fill={clusterColors[clusterIndex % clusterColors.length]}
+                                opacity={0.2}
+                            />
+                            {cluster.nodes.map((node) => (
+                                <Circle
+                                    key={`node-${cluster.id}-${node.song.ISRC}`}
+                                    x={node.x}
+                                    y={node.y}
+                                    radius={Math.max(node.radius, minClickRadius / scale)}
+                                    fill={clusterColors[clusterIndex % clusterColors.length]}
+                                    stroke={colorMode === "dark" ? "#48BB78" : "#2F855A"}
+                                    strokeWidth={2 / scale}
+                                    onClick={(e) => handleNodeClick(e, node)}
+                                    hitStrokeWidth={10 / scale}
+                                />
+                            ))}
+                        </Group>
+                    );
+                })}
             </Layer>
         </Stage>
-    ), [edges, nodes, onSongSelect, scale, position, colorMode]);
+    ), [edges, clusters, onSongSelect, scale, position, colorMode, minClickRadius, clusterColors]);
 
     return (
         <Box

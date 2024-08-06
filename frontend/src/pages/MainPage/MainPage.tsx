@@ -29,7 +29,7 @@ const MainPage: React.FC = () => {
         nodeSizeScale: 0.4,
         edgeWeightScale: 0.4,
     });
-    const [songCount, setSongCount] = useState(512); // Начальное значение количества песен
+    const [songCount, setSongCount] = useState(512);
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const handleSongSelect = (song: SpotifySong) => {
@@ -50,6 +50,18 @@ const MainPage: React.FC = () => {
         setSongCount(value);
     };
 
+    const handleSelectSimilarSong = (url: string) => {
+        const newSelectedSong = songs.find(song => song.Track === url.split('/').pop());
+        if (newSelectedSong) {
+            setSelectedSong(newSelectedSong);
+            if (isMobile) {
+                onOpen();
+            }
+        } else {
+            console.error('Song not found:', url);
+        }
+    };
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -58,16 +70,16 @@ const MainPage: React.FC = () => {
         return <div>Error: {error}</div>;
     }
 
-    // Ограничиваем количество песен для отображения
     const limitedSongs = songs.slice(0, songCount);
+
     return (
         <Flex direction={"row"} gap={8} justifyContent={"center"} w={"100%"} h={"90dvh"} >
             <Flex className="main-page" direction={"column"} alignItems={"center"} h={"100%"}>
                 <Flex alignItems={"center"} gap={4} p={3} justifyContent={"space-between"} w={"100%"}>
-                <Heading size={["md", "lg"]} fontWeight={"bold"} >Spotify Song Similarity Analysis</Heading>
+                    <Heading size={["md", "lg"]} fontWeight={"bold"} >Spotify Song Similarity Analysis</Heading>
                     <HStack>
-                    <Text>{colorMode}</Text>
-                    <Switch size={["sm", "md"]} onChange={toggleColorMode} />
+                        <Text>{colorMode}</Text>
+                        <Switch size={["sm", "md"]} onChange={toggleColorMode} />
                     </HStack>
                 </Flex>
                 <VStack className="content" h={"100%"}>
@@ -98,10 +110,10 @@ const MainPage: React.FC = () => {
                             </Slider>
                         </FormControl>
                         <Flex direction={"column"} justifyContent={"center"} h={"100%"}>
-                        <VisualizationControls
-                            settings={visualizationSettings}
-                            onSettingsChange={handleSettingsChange}
-                        />
+                            <VisualizationControls
+                                settings={visualizationSettings}
+                                onSettingsChange={handleSettingsChange}
+                            />
                         </Flex>
                     </Card>
                     <Modal isOpen={!!(isOpen && isMobile)} onClose={handleClose} useInert={isMobile}>
@@ -114,6 +126,7 @@ const MainPage: React.FC = () => {
                                     <SongInfo
                                         song={selectedSong}
                                         similarSongs={similarities ? similarities[selectedSong.Track] : {}}
+                                        onSelectSimilarSong={handleSelectSimilarSong}
                                     />
                                 ) : (
                                     <div>No song selected</div>
@@ -125,18 +138,18 @@ const MainPage: React.FC = () => {
             </Flex>
 
             { !isMobile &&
-                <Card w={"30%"}>
-                    {selectedSong ? (
-                        <SongInfo
-                            song={selectedSong}
-                            similarSongs={similarities ? similarities[selectedSong.Track] : {}}
-                        />
-                    ) : (
-                        <div>No song selected</div>
-                    )}
-                </Card>
+              <Card w={"30%"}>
+                  {selectedSong ? (
+                      <SongInfo
+                          song={selectedSong}
+                          similarSongs={similarities ? similarities[selectedSong.Track] : {}}
+                          onSelectSimilarSong={handleSelectSimilarSong}
+                      />
+                  ) : (
+                      <div>No song selected</div>
+                  )}
+              </Card>
             }
-
         </Flex>
     );
 };

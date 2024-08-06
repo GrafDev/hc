@@ -7,16 +7,17 @@ import {
     HStack,
     UnorderedList,
     ListItem,
-    Link,
+    Button, // Добавлен импорт Button
 } from '@chakra-ui/react';
-import { SpotifySong } from "../../../entities/song/model/types";
+import {SpotifySong} from "../../../entities/song/model/types";
 
 interface SongInfoProps {
     song: SpotifySong;
     similarSongs: { [key: string]: number } | null | undefined;
+    onSelectSimilarSong: (url: string) => void; // Добавлен новый проп для обработки выбора песни
 }
 
-const SongInfo: React.FC<SongInfoProps> = ({ song, similarSongs }) => {
+const SongInfo: React.FC<SongInfoProps> = ({song, similarSongs, onSelectSimilarSong}) => {
     const formatValue = (value: string | number | null): string => {
         if (value === null) return 'Not available';
         if (typeof value === 'string') return value;
@@ -30,7 +31,7 @@ const SongInfo: React.FC<SongInfoProps> = ({ song, similarSongs }) => {
         : [];
 
     return (
-        <Box px={2} py={1}>
+        <Box px={2} py={1} maxHeight="100vh" overflowY="auto">
             <Heading as="h2" size="xl" mb={4}>{song.Track}</Heading>
             <Text>Artist: {song.Artist}</Text>
             <Text>Album: {song.Album_Name}</Text>
@@ -68,17 +69,24 @@ const SongInfo: React.FC<SongInfoProps> = ({ song, similarSongs }) => {
                 <ListItem>Shazam Counts: {formatValue(song.Shazam_Counts)}</ListItem>
                 <ListItem>TIDAL Popularity: {formatValue(song.TIDAL_Popularity)}</ListItem>
             </UnorderedList>
-
             <Heading as="h3" size="lg" mt={6} mb={2}>Similar Songs:</Heading>
             {sortedSimilarSongs.length > 0 ? (
                 <VStack align="stretch">
                     {sortedSimilarSongs.map(([url, similarity]) => (
-                        <HStack key={url}>
-                            <Link href={url} isExternal color="blue.500">
-                                {url.split('/').pop()}
-                            </Link>
-                            <Text>- Similarity: {similarity.toFixed(2)}</Text>
-                        </HStack>
+
+                        <Button
+                            size="sm"
+                            variant={"outline"}
+                            onClick={() => onSelectSimilarSong(url)}
+                        >
+                            <HStack key={url}>
+                                <Text >
+                                    {url.split('/').pop()}
+                                </Text>
+                                <Text>- Similarity: {similarity.toFixed(2)}</Text>
+                            </HStack>
+                        </Button>
+
                     ))}
                 </VStack>
             ) : (
