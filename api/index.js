@@ -1,26 +1,18 @@
-
 import express from 'express';
-import routerAPI from './src/routes/user-routes.js'
-// import { https } from 'firebase-functions';
+import routerAPI from './src/routes/routes.js'
 
-const port =  5000;
+const PORT = 3000;
+const app = express();
+app.use(express.json());
 
-const data=express();
-
-
-data.use(express.json());
-   data.use('/',routerAPI);
-
-
-data.get("/hello", (req, res) => {
-  res.send("Hello human!");
+app.get('/hello', (req, res) => {
+  res.send('Hello World 01!');
 });
 
+app.use('/', routerAPI);
 
-data.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+app.listen(PORT,()=>{
+    console.log(`Server started on port ${PORT}`)
+})
 
-// export const api = https.onRequest(data);
-
-
+// export const api = functions.https.onRequest(app);

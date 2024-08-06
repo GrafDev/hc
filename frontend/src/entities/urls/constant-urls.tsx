@@ -1,3 +1,4 @@
 
 export const CSV_URL = 'https://firebasestorage.googleapis.com/v0/b/huntercorpspotifyanalysis.appspot.com/o/Most%20Streamed%20Spotify%20Songs%202024.csv?alt=media&token=b90b10d4-1141-475f-ac71-bf3b74a8686e';
 export const CSV_SHORT_URL="https://firebasestorage.googleapis.com/v0/b/huntercorpspotifyanalysis.appspot.com/o/Most%20Streamed%20Spotify%20Songs%202024-short.csv?alt=media&token=28a9fca0-08c3-44c4-83b6-1def929f26c1"
+export const CSV_URL_STORAGE="https://firebasestorage.googleapis.com/v0/b/hunter-corp-sa.appspot.com/o/Most%20Streamed%20Spotify%20Songs%202024.csv?alt=media&token=aace5ba9-5854-4220-8b9a-39ff89c6ac7a"

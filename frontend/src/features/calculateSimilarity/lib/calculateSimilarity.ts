@@ -1,14 +1,9 @@
-
-
-// Нормализация числового значения в диапазоне [0, 1]
-
-import {SimilarityMetric, SongSimilarity, SpotifySong} from "../../../entities/song/model/types";
+import { SimilarityMetric, SongSimilarity, SpotifySong } from "../../../entities/song/model/types";
 
 function normalize(value: number, min: number, max: number): number {
-    return (value - min) / (max - min);
+    return (max - min === 0) ? 0 : (value - min) / (max - min);
 }
 
-// Косинусное сходство
 function cosineSimilarity(a: number[], b: number[]): number {
     const dotProduct = a.reduce((sum, _, i) => sum + a[i] * b[i], 0);
     const magnitudeA = Math.sqrt(a.reduce((sum, val) => sum + val * val, 0));
@@ -16,37 +11,120 @@ function cosineSimilarity(a: number[], b: number[]): number {
     return dotProduct / (magnitudeA * magnitudeB);
 }
 
-// Евклидово расстояние
 function euclideanDistance(a: number[], b: number[]): number {
     return Math.sqrt(a.reduce((sum, _, i) => sum + Math.pow(a[i] - b[i], 2), 0));
 }
 
-// Преобразование евклидова расстояния в меру сходства
 function euclideanSimilarity(a: number[], b: number[]): number {
     const distance = euclideanDistance(a, b);
     return 1 / (1 + distance);
 }
 
-// Получение числовых характеристик песни
+function jaccardSimilarity(a: SpotifySong, b: SpotifySong): number {
+    const setA = new Set([a.Track, a.Artist, a.Release_Date]);
+    const setB = new Set([b.Track, b.Artist, b.Release_Date]);
+
+    let intersectionSize = 0;
+    let unionSize = 0;
+
+    setA.forEach(item => {
+        if (setB.has(item)) {
+            intersectionSize++;
+        }
+        unionSize++;
+    });
+
+    setB.forEach(item => {
+        if (!setA.has(item)) {
+            unionSize++;
+        }
+    });
+
+    return intersectionSize / unionSize;
+}
+
+function levenshteinDistance(a: string, b: string): number {
+    if (a == null || b == null) {
+        return 0;
+    }
+
+    a = a.toString();
+    b = b.toString();
+
+    if (a.length === 0) return b.length;
+    if (b.length === 0) return a.length;
+
+    const matrix = [];
+
+    for (let i = 0; i <= b.length; i++) {
+        matrix[i] = [i];
+    }
+
+    for (let j = 0; j <= a.length; j++) {
+        matrix[0][j] = j;
+    }
+
+    for (let i = 1; i <= b.length; i++) {
+        for (let j = 1; j <= a.length; j++) {
+            if (b.charAt(i - 1) === a.charAt(j - 1)) {
+                matrix[i][j] = matrix[i - 1][j - 1];
+            } else {
+                matrix[i][j] = Math.min(
+                    matrix[i - 1][j - 1] + 1,
+                    matrix[i][j - 1] + 1,
+                    matrix[i - 1][j] + 1
+                );
+            }
+        }
+    }
+
+    return matrix[b.length][a.length];
+}
+
+function levenshteinSimilarity(a: SpotifySong, b: SpotifySong): number {
+    if (!a || !b || !a.Track || !b.Track) {
+        return 0;
+    }
+
+    const distance = levenshteinDistance(a.Track, b.Track);
+    const maxLength = Math.max(a.Track.length, b.Track.length);
+    return maxLength === 0 ? 1 : 1 - distance / maxLength;
+}
+
 function getSongFeatures(song: SpotifySong): number[] {
     return [
-        song.danceability,
-        song.energy,
-        song.loudness,
-        song.speechiness,
-        song.acousticness,
-        song.instrumentalness,
-        song.liveness,
-        song.valence,
-        song.tempo,
+        song.All_Time_Rank,
+        song.Track_Score,
+        song.Spotify_Streams,
+        song.Spotify_Playlist_Count,
+        song.Spotify_Playlist_Reach,
+        song.Spotify_Popularity,
+        song.YouTube_Views,
+        song.YouTube_Likes,
+        song.TikTok_Posts,
+        song.TikTok_Likes,
+        song.TikTok_Views,
+        song.YouTube_Playlist_Reach,
+        song.Apple_Music_Playlist_Count,
+        song.AirPlay_Spins,
+        song.SiriusXM_Spins,
+        song.Deezer_Playlist_Count,
+        song.Deezer_Playlist_Reach,
+        song.Amazon_Playlist_Count,
+        song.Pandora_Streams,
+        song.Pandora_Track_Stations,
+        song.Soundcloud_Streams,
+        song.Shazam_Counts,
+        song.TIDAL_Popularity,
+        song.Explicit_Track
     ];
 }
 
-// Нормализация характеристик песен
 function normalizeSongFeatures(songs: SpotifySong[]): number[][] {
     const features = songs.map(getSongFeatures);
     const numFeatures = features[0].length;
     const normalizedFeatures: number[][] = [];
+
     for (let i = 0; i < numFeatures; i++) {
         const featureValues = features.map(f => f[i]);
         const min = Math.min(...featureValues);
@@ -62,21 +140,32 @@ export function calculateSimilarity(songs: SpotifySong[], metric: SimilarityMetr
     const normalizedFeatures = normalizeSongFeatures(songs);
     const similarity: SongSimilarity = {};
     for (let i = 0; i < songs.length; i++) {
-        similarity[songs[i].spotify_url] = {};
+        similarity[songs[i].Track] = {};
         for (let j = 0; j < songs.length; j++) {
             if (i !== j) {
                 let similarityValue: number;
-                switch (metric) {
-                    case 'cosine':
-                        similarityValue = cosineSimilarity(normalizedFeatures[i], normalizedFeatures[j]);
-                        break;
-                    case 'euclidean':
-                        similarityValue = euclideanSimilarity(normalizedFeatures[i], normalizedFeatures[j]);
-                        break;
-                    default:
-                        throw new Error(`Unsupported similarity metric: ${metric}`);
+                try {
+                    switch (metric) {
+                        case 'cosine':
+                            similarityValue = cosineSimilarity(normalizedFeatures[i], normalizedFeatures[j]);
+                            break;
+                        case 'euclidean':
+                            similarityValue = euclideanSimilarity(normalizedFeatures[i], normalizedFeatures[j]);
+                            break;
+                        case 'jaccard':
+                            similarityValue = jaccardSimilarity(songs[i], songs[j]);
+                            break;
+                        case 'levenshtein':
+                            similarityValue = levenshteinSimilarity(songs[i], songs[j]);
+                            break;
+                        default:
+                            throw new Error(`Unsupported similarity metric: ${metric}`);
+                    }
+                } catch (error) {
+                    console.error(`Error calculating similarity for songs ${i} and ${j}:`, error);
+                    similarityValue = 0;
                 }
-                similarity[songs[i].spotify_url][songs[j].spotify_url] = similarityValue;
+                similarity[songs[i].Track][songs[j].Track] = similarityValue;
             }
         }
     }
@@ -85,12 +174,12 @@ export function calculateSimilarity(songs: SpotifySong[], metric: SimilarityMetr
 }
 
 export function findSimilarSongs(song: SpotifySong, songs: SpotifySong[], similarity: SongSimilarity, limit: number = 5): SpotifySong[] {
-    const songSimilarities = similarity[song.spotify_url];
+    const songSimilarities = similarity[song.Track];
     if (!songSimilarities) return [];
     const sortedSimilarities = Object.entries(songSimilarities)
         .sort(([, a], [, b]) => b - a)
         .slice(0, limit);
 
-    return sortedSimilarities.map(([url]) => songs.find(s => s.spotify_url === url)!)
+    return sortedSimilarities.map(([track]) => songs.find(s => s.Track === track)!)
         .filter(Boolean);
 }

@@ -1,6 +1,6 @@
-import React from 'react';
-import MainPage from '../pages/MainPage/MainPage.tsx';
-import {Providers} from "./providers/Providers.tsx";
+import * as React from 'react';
+import {Providers} from "./providers/Providers";
+import MainPage from "../pages/MainPage/MainPage";
 
 const App: React.FC = () => {
     return (
