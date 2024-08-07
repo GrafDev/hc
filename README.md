@@ -86,17 +86,13 @@ npm run build
 
 ### Frontend
 
-Разверните собранный frontend на выбранной платформе хостинга.
+firebase deploy --only hosting
 
 ### Backend
 cd functions
 npm run deploy
 
 Убедитесь, что у вас установлен Firebase CLI и вы вошли в свой аккаунт Firebase.
-
-## Конфигурация прокси
-
-Frontend настроен с прокси на `https://l24w629902.execute-api.eu-north-1.amazonaws.com`.
 
 ## Зависимости
 
