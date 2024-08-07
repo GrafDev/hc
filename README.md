@@ -5,7 +5,7 @@
 
 Вы можете ознакомится с приложением тут: https://hunter-corp-sa.web.app
 
-<img src="./src/images/stellar-burger.gif" alt="Stellar-Burger">
+<img src=".hcsa.png" alt="Stellar-Burger">
 
 ## Структура проекта
 
