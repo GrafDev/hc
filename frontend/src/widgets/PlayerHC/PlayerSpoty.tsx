@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import {Box, Button, Text,  useToast, IconButton, HStack} from '@chakra-ui/react';
+import {Box, Button,  useToast, IconButton, HStack} from '@chakra-ui/react';
 import {CiPause1, CiPlay1, CiStop1} from "react-icons/ci";
 
 const CLIENT_ID = '20e38d3e288f4dfc9ff435ecff30b867';
@@ -19,7 +19,6 @@ const PlayerSpoty: React.FC<PlayerProps> = ({ songName, artist, trackUri }) => {
     const [player, setPlayer] = useState<Spotify.Player | null>(null);
     const [deviceId, setDeviceId] = useState<string | null>(null);
     const [isPlaying, setIsPlaying] = useState(false);
-    const [currentTrack, setCurrentTrack] = useState<Spotify.Track | null>(null);
     const toast = useToast();
 
     const login = useCallback(() => {
@@ -83,7 +82,6 @@ const PlayerSpoty: React.FC<PlayerProps> = ({ songName, artist, trackUri }) => {
 
         player.addListener('player_state_changed', (state: any) => {
             if (!state) return;
-            setCurrentTrack(state.track_window.current_track);
             setIsPlaying(!state.paused);
         });
 
@@ -253,7 +251,6 @@ const PlayerSpoty: React.FC<PlayerProps> = ({ songName, artist, trackUri }) => {
         if (!player) return;
         player.pause();
         player.seek(0);
-        setCurrentTrack(null)
         setIsPlaying(false);
     }, [player]);
 
@@ -263,6 +260,7 @@ const PlayerSpoty: React.FC<PlayerProps> = ({ songName, artist, trackUri }) => {
 
     return (
         <Box p={4}>
+            If you have Premium Spotify account, you can listen to
             <HStack spacing={4}>
                 <IconButton
                     icon={isPlaying ? <CiPause1 /> : <CiPlay1 />}
@@ -274,7 +272,6 @@ const PlayerSpoty: React.FC<PlayerProps> = ({ songName, artist, trackUri }) => {
                     aria-label="stop"
                     onClick={handleStop}
                 />
-                <Text>{currentTrack?.name || "No track playing"}</Text>
             </HStack>
         </Box>
     );

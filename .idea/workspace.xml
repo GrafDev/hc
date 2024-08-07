@@ -4,23 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="39ec2c1b-fe7b-42d2-b232-b35ae80379be" name="Changes" comment="MAke Start check qout of song to cuantity">
-      <change afterPath="$PROJECT_DIR$/frontend/src/spotify.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/widgets/ChooseQuantity/ChooseQuantity.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/widgets/PlayerHC/PlayerSpoty.tsx" afterDir="false" />
+    <list default="true" id="39ec2c1b-fe7b-42d2-b232-b35ae80379be" name="Changes" comment="Ready">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/functions/src/data/Most Streamed Spotify Songs 2024.csv" beforeDir="false" afterPath="$PROJECT_DIR$/api/functions/src/data/Most Streamed Spotify Songs 2024.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/.firebase/hosting.ZGlzdA.cache" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.firebase/hosting.ZGlzdA.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/dist/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/dist/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/providers/DataProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/providers/DataProvider.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/providers/Providers.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/providers/Providers.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/MainPage/MainPage.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/MainPage/MainPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/MainPage/MainPage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/widgets/SongInfo/ui/SongInfo.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/widgets/SongInfo/ui/SongInfo.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/widgets/PlayerHC/PlayerSpoty.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/widgets/PlayerHC/PlayerSpoty.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -167,7 +154,7 @@
       <workItem from="1722990340177" duration="258000" />
       <workItem from="1722990608137" duration="89000" />
       <workItem from="1722990706524" duration="18000" />
-      <workItem from="1723017760552" duration="11902000" />
+      <workItem from="1723017760552" duration="12741000" />
     </task>
     <task id="LOCAL-00001" summary="q">
       <option name="closed" value="true" />
@@ -297,7 +284,15 @@
       <option name="project" value="LOCAL" />
       <updated>1722985581407</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Ready">
+      <option name="closed" value="true" />
+      <created>1723030055739</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1723030055739</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -333,6 +328,7 @@
     <MESSAGE value="Make pan zoom and click" />
     <MESSAGE value="Parse JSon on Server" />
     <MESSAGE value="MAke Start check qout of song to cuantity" />
-    <option name="LAST_COMMIT_MESSAGE" value="MAke Start check qout of song to cuantity" />
+    <MESSAGE value="Ready" />
+    <option name="LAST_COMMIT_MESSAGE" value="Ready" />
   </component>
 </project>
