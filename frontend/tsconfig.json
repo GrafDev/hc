@@ -1,5 +1,7 @@
 {
-  "files": [],
+  "files": [
+    "src/spotify.d.ts"
+  ],
   "compilerOptions": {
     "esModuleInterop": true
   },

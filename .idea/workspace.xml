@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="39ec2c1b-fe7b-42d2-b232-b35ae80379be" name="Changes" comment="Front is ok." />
+    <list default="true" id="39ec2c1b-fe7b-42d2-b232-b35ae80379be" name="Changes" comment="Ready">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.firebase/hosting.ZGlzdA.cache" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.firebase/hosting.ZGlzdA.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/widgets/PlayerHC/PlayerSpoty.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/widgets/PlayerHC/PlayerSpoty.tsx" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,16 +17,17 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="TypeScript File" />
         <option value="package.json" />
         <option value="JavaScript File" />
+        <option value="TypeScript File" />
+        <option value="TypeScript JSX File" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="884d3594b03aa9cce5914c9e1337007cb4547850" />
+        <entry key="$PROJECT_DIR$" value="Graf" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -43,44 +48,46 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Node.js.index.js.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Graf",
-    "ignore.virus.scanning.warn.message": "true",
-    "javascript.nodejs.core.library.configured.version": "20.12.2",
-    "javascript.nodejs.core.library.typings.version": "20.12.14",
-    "last_opened_file_path": "C:/Users/gregy/WebstormProjects/hc/frontend/package.json",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.standard": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.standard": "",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "npm.build.executor": "Run",
-    "npm.dev.executor": "Run",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "ts.external.directory.path": "C:\\Users\\gregy\\WebstormProjects\\hc\\frontend\\node_modules\\typescript\\lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Node.js.index.js.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;GrafDev&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;20.12.2&quot;,
+    &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;20.12.14&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/gregy/WebstormProjects/hc/api/functions&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;npm.build.executor&quot;: &quot;Run&quot;,
+    &quot;npm.dev.executor&quot;: &quot;Run&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\gregy\\WebstormProjects\\hc\\frontend\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\gregy\WebstormProjects\hc\api\functions\src\routes" />
       <recent name="C:\Users\gregy\WebstormProjects\hc\api\functions" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\gregy\WebstormProjects\hc\frontend\src\widgets\PlayerHC" />
+      <recent name="C:\Users\gregy\WebstormProjects\hc\frontend\src" />
+      <recent name="C:\Users\gregy\WebstormProjects\hc\frontend" />
       <recent name="C:\Users\gregy\WebstormProjects\hc\frontend\src\shared\ui\assets" />
       <recent name="C:\Users\gregy\WebstormProjects\hc\frontend\src\shared\ui" />
-      <recent name="C:\Users\gregy\WebstormProjects\hc\api\functions" />
     </key>
   </component>
-  <component name="RunManager" selected="npm.dev">
-    <configuration name="index.js" type="NodeJSConfigurationType" nameIsGenerated="true" path-to-js-file="index.js" working-dir="$PROJECT_DIR$/api">
+  <component name="RunManager" selected="npm.build">
+    <configuration name="index.js" type="NodeJSConfigurationType" nameIsGenerated="true" path-to-js-file="index.js" working-dir="$PROJECT_DIR$/api/functions">
       <method v="2" />
     </configuration>
     <configuration name="build" type="js.build_tools.npm" nameIsGenerated="true">
@@ -105,8 +112,8 @@
     </configuration>
     <list>
       <item itemvalue="Node.js.index.js" />
-      <item itemvalue="npm.dev" />
       <item itemvalue="npm.build" />
+      <item itemvalue="npm.dev" />
     </list>
   </component>
   <component name="SharedIndexes">
@@ -134,7 +141,20 @@
       <workItem from="1722887548433" duration="7424000" />
       <workItem from="1722895459689" duration="992000" />
       <workItem from="1722896463681" duration="4153000" />
-      <workItem from="1722924081392" duration="5895000" />
+      <workItem from="1722924081392" duration="7607000" />
+      <workItem from="1722943757107" duration="11401000" />
+      <workItem from="1722957853714" duration="903000" />
+      <workItem from="1722964712399" duration="9260000" />
+      <workItem from="1722978215744" duration="8388000" />
+      <workItem from="1722986628905" duration="35000" />
+      <workItem from="1722986678518" duration="118000" />
+      <workItem from="1722986806275" duration="1916000" />
+      <workItem from="1722988735868" duration="496000" />
+      <workItem from="1722989241563" duration="1087000" />
+      <workItem from="1722990340177" duration="258000" />
+      <workItem from="1722990608137" duration="89000" />
+      <workItem from="1722990706524" duration="18000" />
+      <workItem from="1723017760552" duration="12741000" />
     </task>
     <task id="LOCAL-00001" summary="q">
       <option name="closed" value="true" />
@@ -216,7 +236,63 @@
       <option name="project" value="LOCAL" />
       <updated>1722929589941</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Front is ok.">
+      <option name="closed" value="true" />
+      <created>1722930301088</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1722930301088</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Make pan zoom and click">
+      <option name="closed" value="true" />
+      <created>1722945552148</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1722945552148</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Make pan zoom and click">
+      <option name="closed" value="true" />
+      <created>1722952794555</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1722952794555</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Parse JSon on Server">
+      <option name="closed" value="true" />
+      <created>1722978942089</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1722978942089</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Parse JSon on Server">
+      <option name="closed" value="true" />
+      <created>1722984072092</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1722984072092</updated>
+    </task>
+    <task id="LOCAL-00016" summary="MAke Start check qout of song to cuantity">
+      <option name="closed" value="true" />
+      <created>1722985581407</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1722985581407</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Ready">
+      <option name="closed" value="true" />
+      <created>1723030055739</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1723030055739</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -227,7 +303,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="New" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -237,6 +325,10 @@
     <MESSAGE value="q" />
     <MESSAGE value="Server is ready" />
     <MESSAGE value="Front is ok." />
-    <option name="LAST_COMMIT_MESSAGE" value="Front is ok." />
+    <MESSAGE value="Make pan zoom and click" />
+    <MESSAGE value="Parse JSon on Server" />
+    <MESSAGE value="MAke Start check qout of song to cuantity" />
+    <MESSAGE value="Ready" />
+    <option name="LAST_COMMIT_MESSAGE" value="Ready" />
   </component>
 </project>
