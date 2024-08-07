@@ -5,12 +5,25 @@ import { SpotifySong, VisualizationSettings } from '../../entities/song/model/ty
 import {
     Button,
     Card,
-    Flex, FormControl, FormLabel, Heading,
+    Flex,
+    FormControl,
+    FormLabel,
+    Heading,
     HStack,
-    Modal, ModalBody, ModalCloseButton,
+    Modal,
+    ModalBody,
+    ModalCloseButton,
     ModalContent,
     ModalHeader,
-    ModalOverlay, Slider, SliderFilledTrack, SliderThumb, SliderTrack, Switch, Text, useBreakpointValue, useColorMode,
+    ModalOverlay,
+    Slider,
+    SliderFilledTrack,
+    SliderThumb,
+    SliderTrack,
+    Switch,
+    Text,
+    useBreakpointValue,
+    useColorMode,
     useDisclosure,
     VStack
 } from "@chakra-ui/react";
@@ -18,6 +31,7 @@ import { useData } from "../../app/providers/DataProvider";
 import VisualizationControls from "../../widgets/VisualizationControls/ui/VisualizationControls";
 import SongInfo from "../../widgets/SongInfo/ui/SongInfo";
 import MemoizedSimilarityMap from "../../widgets/SimilarityMap/ui/SimilarityMap";
+import {ScaleLoader} from "react-spinners";
 
 
 
@@ -71,7 +85,12 @@ const MainPage: React.FC = () => {
     };
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <Flex fontSize={24} w={"100dvw"} h={"100vh"} justifyContent={"center"} alignItems={"center"} >
+            <HStack>
+                <ScaleLoader />
+                <Text>Fetching data...</Text>
+            </HStack>
+        </Flex>;
     }
 
     if (error) {
