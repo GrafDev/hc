@@ -4,7 +4,7 @@
 Это веб-приложение предоставляет рекомендации песен и анализ их сходства, интегрируясь с API Spotify и включая серверную часть на основе Firebase Functions.
 
 Вы можете ознакомится с приложением тут: https://hunter-corp-sa.web.app
-[![HCSA](./hcsa.png)](./hcsa.png)
+[![HCSA](./hcsa.png)](https://hunter-corp-sa.web.app/#)
 
 ## Структура проекта
 
