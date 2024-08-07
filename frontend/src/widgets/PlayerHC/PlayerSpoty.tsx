@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import {Box, Button,  useToast, IconButton, HStack} from '@chakra-ui/react';
-import {CiPause1, CiPlay1, CiStop1} from "react-icons/ci";
+import { Box, Button, useToast, IconButton, HStack } from '@chakra-ui/react';
+import { CiPause1, CiPlay1, CiStop1 } from "react-icons/ci";
 
 const CLIENT_ID = '20e38d3e288f4dfc9ff435ecff30b867';
 const REDIRECT_URI = 'https://hunter-corp-sa.web.app/';
@@ -22,6 +22,9 @@ const PlayerSpoty: React.FC<PlayerProps> = ({ songName, artist, trackUri }) => {
     const toast = useToast();
 
     const login = useCallback(() => {
+        // Удаляем токен из локального хранилища перед входом
+        localStorage.removeItem("token");
+
         const authUrl = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=${SCOPES.join("%20")}`;
         window.location.href = authUrl;
     }, []);
@@ -99,13 +102,21 @@ const PlayerSpoty: React.FC<PlayerProps> = ({ songName, artist, trackUri }) => {
         };
 
         const initializeSDK = async () => {
-            const token = localStorage.getItem("token") || getTokenFromUrl();
+            const storedToken = localStorage.getItem("token");
+            const urlToken = getTokenFromUrl();
+
+            // Если токен из URL доступен, используем его (это новый токен после входа)
+            // В противном случае проверяем сохраненный токен
+            const token = urlToken || storedToken;
 
             if (token) {
                 console.log("Token obtained");
                 const isPremium = await checkUserAccount(token);
                 if (isPremium) {
-                    localStorage.setItem("token", token);
+                    // Если токен из URL, сохраняем его
+                    if (urlToken) {
+                        localStorage.setItem("token", urlToken);
+                    }
                     setToken(token);
 
                     window.onSpotifyWebPlaybackSDKReady = () => {
@@ -122,7 +133,10 @@ const PlayerSpoty: React.FC<PlayerProps> = ({ songName, artist, trackUri }) => {
                         document.body.removeChild(script);
                     };
                 } else {
-                    console.log("Premium account required");
+                    console.log("Premium account required or token expired");
+                    // Если аккаунт не премиум или токен истек, удаляем токен и предлагаем войти снова
+                    localStorage.removeItem("token");
+                    setToken(null);
                 }
             } else {
                 console.log("No token available");
