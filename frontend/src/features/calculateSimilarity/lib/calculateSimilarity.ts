@@ -1,4 +1,5 @@
 import { SimilarityMetric, SongSimilarity, SpotifySong } from "../../../entities/song/model/types";
+import { SHA256 } from 'crypto-js';
 
 function normalize(value: number, min: number, max: number): number {
     return (max - min === 0) ? 0 : (value - min) / (max - min);
@@ -137,8 +138,27 @@ function normalizeSongFeatures(songs: SpotifySong[]): number[][] {
 }
 
 export function calculateSimilarity(songs: SpotifySong[], metric: SimilarityMetric, topN: number = 5): SongSimilarity {
+    // Создаем хеш-сумму для songs
+    const songsHash = SHA256(JSON.stringify(songs)).toString();
+
+    // Создаем ключи для localStorage
+    const hashKey = `songs_hash_${metric}_${topN}`;
+    const similarityKey = `similarity_${metric}_${topN}`;
+
+    // Получаем сохраненный хеш и результат
+    const storedHash = localStorage.getItem(hashKey);
+    const storedResult = localStorage.getItem(similarityKey);
+
+    // Проверяем, совпадает ли текущий хеш с сохраненным
+    if (storedHash === songsHash && storedResult) {
+        // Если хеши совпадают и результат есть, возвращаем сохраненный результат
+        return JSON.parse(storedResult);
+    }
+
+    // Если хеши не совпадают или результата нет, выполняем расчет
     const normalizedFeatures = normalizeSongFeatures(songs);
     const similarity: SongSimilarity = {};
+
     for (let i = 0; i < songs.length; i++) {
         const similarities: { track: string; value: number }[] = [];
         for (let j = 0; j < songs.length; j++) {
@@ -173,6 +193,10 @@ export function calculateSimilarity(songs: SpotifySong[], metric: SimilarityMetr
             similarities.slice(0, topN).map(s => [s.track, s.value])
         );
     }
+
+    // Сохраняем новый хеш и результат в localStorage
+    localStorage.setItem(hashKey, songsHash);
+    localStorage.setItem(similarityKey, JSON.stringify(similarity));
 
     return similarity;
 }

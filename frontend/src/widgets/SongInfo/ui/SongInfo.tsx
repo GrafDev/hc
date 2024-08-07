@@ -12,6 +12,7 @@ import {
 
 import {SpotifySong} from "../../../entities/song/model/types";
 import PlayerHC from "../../PlayerHC/PlayerSpoty.tsx";
+import {useMemo} from "react";
 
 interface SongInfoProps {
     song: SpotifySong;
@@ -38,6 +39,10 @@ const SongInfo: React.FC<SongInfoProps> = ({song, similarSongs, onSelectSimilarS
         return value.toLocaleString();
     };
 
+    const memoizedPlayer = useMemo(() => (
+        <PlayerHC songName={song.Track} artist={song.Artist}/>
+    ), [song.Track, song.Artist]);
+
     const sortedSimilarSongs = similarSongs
         ? Object.entries(similarSongs)
             .sort(([, a], [, b]) => b - a)
@@ -51,7 +56,7 @@ const SongInfo: React.FC<SongInfoProps> = ({song, similarSongs, onSelectSimilarS
             <Text>Album: {song.Album_Name}</Text>
             <Text>Release Date: {song.Release_Date}</Text>
             <Text>ISRC: {song.ISRC}</Text>
-            <PlayerHC songName={song.Track} artist={song.Artist} />
+            {memoizedPlayer}
 
             <Heading as="h3" size="lg" mt={6} mb={2}>Track Details:</Heading>
             <UnorderedList>

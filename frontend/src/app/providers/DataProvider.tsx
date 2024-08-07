@@ -4,7 +4,7 @@ import {SpotifySong, SongSimilarity, SimilarityMetric} from '../../entities/song
 import axios from "axios";
 import {calculateSimilarity} from "../../features/calculateSimilarity/lib/calculateSimilarity.ts";
 
-interface IDataContextType {
+interface DataContextType {
     songs: SpotifySong[];
     _quantity: number;
     similarities: SongSimilarity;
@@ -12,7 +12,7 @@ interface IDataContextType {
     error: string | null;
 }
 
-const DataContext = createContext<IDataContextType | undefined>(undefined);
+const DataContext = createContext<DataContextType | undefined>(undefined);
 
 export const useData = () => {
     const context = useContext(DataContext);
@@ -22,13 +22,12 @@ export const useData = () => {
     return context;
 };
 
-interface IDataProviderProps {
+interface DataProviderProps {
     children: ReactNode;
     quantity: number;
-    isChooseQuantity: boolean
 }
 
-export const DataProvider: React.FC<IDataProviderProps> = ({children, quantity, isChooseQuantity}) => {
+export const DataProvider: React.FC<DataProviderProps> = ({children,quantity}) => {
     const [songs, setSongs] = useState<SpotifySong[]>([]);
     const [_quantity] = useState(quantity);
     const [similarities, setSimilarities] = useState<SongSimilarity>({});
@@ -36,47 +35,37 @@ export const DataProvider: React.FC<IDataProviderProps> = ({children, quantity, 
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (isChooseQuantity) {
         const metric: SimilarityMetric = 'jaccard';
+        const fetchData = async () => {
+            try {
+                setLoading(true);
+                console.log("Loading data from JSON");
+                const apiUrl = `https://us-central1-hunter-corp-sa.cloudfunctions.net/api/json:${quantity}`;
+                // Получение готового JSON
+                const response = await axios.get(apiUrl);
+                const data = response.data;
 
+                console.log("Received JSON data");
 
+                // Предполагаем, что JSON содержит поля songs и similarities
+                setSongs(data);
 
-            const fetchData = async () => {
-                try {
-                    setLoading(true);
-                    console.log("Loading data from JSON");
-                    const apiUrl = `https://us-central1-hunter-corp-sa.cloudfunctions.net/api/json:${_quantity}`;
-                    const response = await axios.get(apiUrl);
-                    const data = response.data;
+                const calculatedSimilarities = calculateSimilarity(data, metric, 5);
+                setSimilarities(calculatedSimilarities);
 
-                    console.log("Received JSON data", data);
+            } catch (err) {
+                setError('Error loading data');
+                // console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-                    if (!Array.isArray(data) || data.length === 0) {
-                        throw new Error('Invalid or empty data received');
-                    }
-
-                    setSongs(data);
-
-                    const calculatedSimilarities = calculateSimilarity(data, metric, 5);
-                    setSimilarities(calculatedSimilarities);
-                } catch (err) {
-                    if (axios.isAxiosError(err)) {
-                        setError(`Error loading data: ${err.message}`);
-                    } else {
-                        setError('An unexpected error occurred');
-                    }
-                    console.error(err);
-                } finally {
-                    setLoading(false);
-                }
-            };
-
-            fetchData();
-        }
-    }, [_quantity,isChooseQuantity]);
+        fetchData();
+    }, []);
 
     return (
-        <DataContext.Provider value={{songs, _quantity, similarities, loading, error}}>
+        <DataContext.Provider value={{songs,_quantity, similarities, loading, error}}>
             {children}
         </DataContext.Provider>
     );
